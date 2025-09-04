@@ -19,8 +19,12 @@ body{
   background:#f7f2ef; margin:0; font-size:16px;
 }
 .wrap{max-width:860px;margin:0 auto;padding:0 16px 72px}
+
+/* 배너 */
 .banner{position:relative;margin:0 -16px 12px;aspect-ratio:16/5;border-radius:16px;overflow:hidden;background:#000}
 .banner img{width:100%;height:100%;object-fit:cover;display:block;opacity:.8}
+.banner img.fade-in{opacity:0;transition:opacity .4s ease}
+.banner img.fade-in.loaded{opacity:.8}
 .banner-text{position:absolute;bottom:14px;left:16px;display:flex;flex-direction:column;gap:2px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
 .banner-top{font-weight:700;font-size:1.6rem;line-height:1.2}
 .banner-bottom{font-size:0.9rem;opacity:.9}
@@ -30,7 +34,7 @@ body{
 .title{margin:4px 0 2px;font-size:1.35rem;font-weight:700}
 .desc{margin:0 0 12px;color:var(--ink-2);font-size:.95rem}
 
-/* 문항 */
+/* 문항 공통 */
 .q{padding:12px 0;border-top:1px dashed var(--border)}
 .q:first-child{border-top:0}
 .q-title{font-size:1.05rem;margin:4px 0 8px;font-weight:700}
@@ -44,7 +48,29 @@ body{
 .opt label:active{transform:scale(.995)}
 .opt input:checked + label{border-color:var(--accent);box-shadow:0 0 0 2px rgba(106,75,59,.12) inset}
 
-/* 색상 그라데이션 바 */
+/* Q1: 두 타입 × 2줄 레이아웃 */
+.mbti-rows { display: grid; gap: 12px; }
+.mbti-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.pair { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 8px; 
+  border: 1px dashed var(--border);
+  border-radius: 10px; 
+  padding: 10px;
+  background: #fff;
+}
+.pair-legend {
+  grid-column: 1 / -1;
+  font-size: .85rem;
+  color: var(--ink-2);
+  margin: -2px 0 4px;
+}
+@media (min-width: 560px){
+  .mbti-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* Q3: 색상 그라데이션 바 */
 .gradient-bar {
   position: relative;
   height: 40px;
@@ -74,14 +100,19 @@ body{
 .progress > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#3b2a22);transition:width .3s ease}
 .btn{border:0;border-radius:12px;padding:10px 14px;font-size:.95rem;cursor:pointer;color:#fff;background:linear-gradient(180deg,#3b2a22,#2c1f19)}
 .btn[disabled]{opacity:.55;cursor:not-allowed}
+.btn-secondary{background:#efe6de;color:#3b2a22;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
+.close{background:#3b2a22;color:#fff;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
 
-/* 결과 모달 */
+/* 결과 모달 & 카드 */
 .result{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .result.show{display:flex}
-.result-card{max-width:760px;width:100%;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;position:relative}
-.result-body{padding:18px 16px 20px;color:#2a1d18}
-.result-title{font-size:1.5rem;margin:4px 0 6px;font-weight:800}
-.combo-title{font-size:1.05rem;color:#6a4b3b;margin:0 0 10px;font-weight:600}
+.result-card{
+  max-width:760px;width:100%;
+  background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;position:relative
+}
+.result-body{padding:18px 16px 20px;color:#2a1d18;position:relative}
+.result-title{font-size:1.5rem;margin:4px 0 6px;font-weight:800;text-align:center}
+.combo-title{font-size:1.05rem;color:#6a4b3b;margin:0 0 10px;font-weight:600;text-align:center}
 .emoji-line{text-align:center;font-size:1.35rem;margin:10px 0}
 .bean-cards{display:flex;flex-direction:column;gap:12px;margin-top:8px}
 .bean{border:1px solid var(--border);border-radius:14px;padding:10px;background:#fefcfa;text-align:center}
@@ -89,73 +120,39 @@ body{
 .bean-note{font-size:0.9rem;margin:4px 0 0}
 .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .method-text{margin-top:14px;font-size:1rem;font-weight:500;color:#3b2a22;text-align:center}
+
+/* 결과 버튼 3개만 */
 .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
-.btn-secondary{background:#efe6de;color:#3b2a22;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
-.close{background:#3b2a22;color:#fff;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
-.first{background:#6a4b3b;color:#fff;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
 
-/* 스크린리더 전용 */
-.sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* 결과 카드 좌하단 링크 */
+.link-area{
+  position:relative;
+  margin-top:14px;
+  display:flex;align-items:center;
+}
+.link-area a{
+  display:inline-block;
+  padding:8px 12px;
+  background:#f2ebe5;
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--accent);
+  text-decoration:none;
+  font-size:.88rem;
+}
 
-/* 키보드 포커스 가시화 */
+/* 키보드 포커스 */
 .opt input:focus-visible + label,
 .gradient-bar input:focus-visible + span,
-.btn:focus-visible, .btn-secondary:focus-visible, .close:focus-visible, .first:focus-visible {
+.btn:focus-visible, .btn-secondary:focus-visible, .close:focus-visible, .link-area a:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 2px;
   border-radius: 6px;
 }
 
-/* 모션 민감 사용자 배려 */
+/* 모션 줄이기 */
 @media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
-}
-
-/* Q1 두 타입 × 2줄 레이아웃 */
-.mbti-rows { display: grid; gap: 12px; }
-.mbti-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
-.pair { 
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: 8px; 
-  border: 1px dashed var(--border);
-  border-radius: 10px; 
-  padding: 10px;
-  background: #fff;
-}
-.pair-legend {
-  grid-column: 1 / -1;
-  font-size: .85rem;
-  color: var(--ink-2);
-  margin: -2px 0 4px;
-}
-/* 넓은 화면에서 각 줄에 두 그룹(EI/NS, FT/JP) 나란히 */
-@media (min-width: 560px){
-  .mbti-row { grid-template-columns: 1fr 1fr; }
-}
-
-/* 배너 페이드-인(옵션) */
-.banner img.fade-in { opacity: 0; transition: opacity .4s ease; }
-.banner img.fade-in.loaded { opacity: .8; }
-
-/* 토스트 */
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  background: rgba(43,31,25,.96);
-  color:#fff;
-  padding:10px 14px;
-  border-radius:12px;
-  font-size:.9rem;
-  box-shadow:0 8px 24px rgba(0,0,0,.25);
-  opacity:0; pointer-events:none;
-  transition: opacity .2s ease, transform .2s ease;
-  z-index: 100;
-}
-.toast.show {
-  opacity:1; transform: translateX(-50%) translateY(-4px);
+  * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
 }
 
 /* 모바일 */
@@ -283,22 +280,26 @@ body{
 
 <!-- 결과 모달 -->
 <div id="result" class="result" role="dialog" aria-modal="true" aria-labelledby="combo-title">
-  <div class="result-card">
+  <div class="result-card" id="resultCard">
     <div class="result-body">
       <!-- 1. 감성 타이틀 -->
       <h2 id="combo-title" class="result-title"></h2>
-      <!-- 2. MBTI 기반 온도 추천 글귀 (글자만) -->
+      <!-- 2. MBTI 기반 온도 추천 글귀 -->
       <p id="mbti-line" class="combo-title"></p>
       <!-- 3. 이모지 라인 (원두2 + HOT/ICE + 방식) -->
       <div id="emoji-line" class="emoji-line"></div>
-      <!-- 4. 원두 카드 (위/아래) -->
+      <!-- 4. 원두 카드 -->
       <div id="bean-cards" class="bean-cards"></div>
-      <!-- 5. 추천 방식 결과 (글귀만) -->
+      <!-- 5. 추천 방식 결과 -->
       <p id="method-text" class="method-text"></p>
 
+      <!-- 좌하단 링크 -->
+      <div class="link-area">
+        <a href="https://linktr.ee/Ne.coffee" target="_blank" rel="noopener">네,커피 바로 가기</a>
+      </div>
+
       <div class="actions">
-        <button id="share" class="btn-secondary" type="button" aria-label="결과 공유하기">공유하기</button>
-        <button id="first" class="first" type="button">첫화면으로</button>
+        <button id="share" class="btn-secondary" type="button" aria-label="결과 카드 이미지로 공유">공유하기</button>
         <button id="again" class="btn-secondary" type="button">다시 하기</button>
         <button id="close" class="close" type="button">닫기</button>
       </div>
@@ -306,8 +307,8 @@ body{
   </div>
 </div>
 
-<!-- 토스트 -->
-<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true">복사되었습니다</div>
+<!-- html2canvas: 결과카드 캡처용 -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
 /* ===== 데이터 세트 ===== */
@@ -392,10 +393,8 @@ function getMBTI(){
   return ei+ns+ft+jp;
 }
 
-/* ===== 결과 생성 (타이브레이커 & 접근성 포함) ===== */
-let __lastResult = null; // 공유용으로 보관
+/* ===== 결과 생성 (타이브레이커 포함) ===== */
 function computeResult(){
-  // 점수 집계
   const totals={A:0,B:0,C:0,D:0,E:0,F:0,G:0,H:0};
   ["q2","q3","q4"].forEach(q=>{
     const sel=form.querySelector(`input[name="${q}"]:checked`);
@@ -406,6 +405,7 @@ function computeResult(){
   const ns=form.querySelector('input[name="mbti-ns"]:checked')?.value;
   const ft=form.querySelector('input[name="mbti-ft"]:checked')?.value;
   const jp=form.querySelector('input[name="mbti-jp"]:checked')?.value;
+
   // MBTI 보조 가중치(0.5씩)
   if(ei==="E"){totals.F+=0.5;totals.B+=0.5;} else if(ei==="I"){totals.A+=0.5;totals.C+=0.5;}
   if(ns==="N"){totals.D+=0.5;totals.E+=0.5;} else if(ns==="S"){totals.G+=0.5;totals.H+=0.5;}
@@ -433,7 +433,6 @@ function computeResult(){
     return a.localeCompare(b);
   });
   const top1=ordered[0], top2=ordered[1];
-  __lastResult = { top1, top2, ordered, totals }; // 저장
   return {top1, top2, totals};
 }
 
@@ -474,16 +473,11 @@ function renderResult(){
 
   // 방식 결과
   document.getElementById('method-text').textContent = METHODS[methodKey].text;
-
-  // 공유용 데이터 최신화
-  __lastResult.methodKey = methodKey;
-  __lastResult.mbti = mbti;
-  __lastResult.temp = (methodKey==="M3") ? "ICE" : (mbtiMeta.temp==="ice" ? "ICE" : "HOT");
 }
 
 /* ===== 모달 접근성/UX ===== */
 const resultEl = document.getElementById('result');
-const firstBtn = document.getElementById('first');
+const resultCard = document.getElementById('resultCard');
 const againBtn = document.getElementById('again');
 const closeBtn = document.getElementById('close');
 const shareBtn = document.getElementById('share');
@@ -493,22 +487,19 @@ function lockScroll(lock){
   document.documentElement.style.overflow = lock ? 'hidden' : '';
   document.body.style.overflow = lock ? 'hidden' : '';
 }
-
 function showModal(){
   lastFocused = document.activeElement;
   resultEl.classList.add('show');
   lockScroll(true);
-  (firstBtn || resultEl).focus({preventScroll:true});
+  (shareBtn || resultEl).focus({preventScroll:true});
   document.addEventListener('keydown', trapFocus);
 }
-
 function hideModal(){
   resultEl.classList.remove('show');
   lockScroll(false);
   document.removeEventListener('keydown', trapFocus);
   if(lastFocused && typeof lastFocused.focus==='function') lastFocused.focus();
 }
-
 function trapFocus(e){
   const focusables = resultEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
   if(e.key === 'Escape'){ hideModal(); return; }
@@ -518,13 +509,11 @@ function trapFocus(e){
   if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
   else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
 }
-
-// 바깥 클릭 닫기
 resultEl.addEventListener('click', (e)=>{ if(e.target===resultEl) hideModal(); });
 
 /* ===== 이벤트 바인딩 ===== */
 submitBtn.addEventListener('click', ()=>{
-  // 필수 체크(이중 안전망)
+  // 필수 체크
   const requiredGroups = [
     ['mbti-ei','mbti-ns','mbti-ft','mbti-jp'],
     ['q2'],['q3'],['q4'],['method']
@@ -534,92 +523,56 @@ submitBtn.addEventListener('click', ()=>{
     return !!form.querySelector(`input[name="${grp[0]}"]:checked`);
   });
   if(!ok){ alert('모든 문항을 선택해주세요.'); return; }
-
   renderResult();
   showModal();
 });
+closeBtn.onclick=hideModal;
+againBtn.onclick=()=>{ hideModal(); form.reset(); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); };
 
-document.getElementById('close').onclick=hideModal;
-document.getElementById('again').onclick=()=>{ hideModal(); form.reset(); updateProgress(); };
-document.getElementById('first').onclick=()=>{ hideModal(); form.reset(); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); };
+/* ===== 결과 카드 이미지 공유 ===== */
+async function shareCardImage(){
+  // 카드 영역을 캔버스로 캡처
+  const canvas = await html2canvas(resultCard, {
+    backgroundColor: '#ffffff',
+    scale: window.devicePixelRatio < 2 ? 2 : window.devicePixelRatio, // 선명하게
+    useCORS: true
+  });
+  const dataUrl = canvas.toDataURL('image/png');
+  // dataURL -> Blob(File)
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  const file = new File([blob], 'ne-coffee-result.png', { type: 'image/png' });
 
-/* ===== 진행률 내레이션(스크린리더) ===== */
-const sr = document.createElement('span');
-sr.id = 'progress-sr';
-sr.className = 'sr-only';
-document.body.appendChild(sr);
-const _updateProgress = updateProgress;
-updateProgress = function(){
-  _updateProgress();
-  const width = prog.style.width || '0%';
-  sr.textContent = `진행률 ${width}`;
-};
-
-/* ===== 공유하기 ===== */
-const toast = document.getElementById('toast');
-
-function showToast(msg='복사되었습니다'){
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(()=> toast.classList.remove('show'), 1800);
-}
-
-function getSharePayload(){
-  const title = document.getElementById('combo-title').textContent.trim() || '네,커피 핏팅 테스트 결과';
-  const emoji = document.getElementById('emoji-line').textContent.trim();
-  const beanNodes = document.querySelectorAll('#bean-cards .bean-title');
-  const beans = Array.from(beanNodes).map(n=> n.textContent.trim()).join(' / ');
-  const method = document.getElementById('method-text').textContent.trim();
-  const url = location.href;
-
-  const textLines = [
-    `🌟 ${title}`,
-    ` ${emoji}`,
-    `원두: ${beans}`,
-    method,
-    `🔗 ${url}`
-  ];
-  return {
-    title,
-    text: textLines.join('\n')
-  };
-}
-
-async function shareResult(){
-  const payload = getSharePayload();
-  try{
-    if(navigator.share){
-      await navigator.share(payload);
-    }else{
-      await navigator.clipboard.writeText(payload.text);
-      showToast('결과가 클립보드에 복사되었어요');
-    }
-  }catch(e){
-    // 사용자가 취소했을 수 있음. 그래도 폴백 복사 시도
+  // Web Share Level 2 (파일 공유) 지원 시
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try{
-      await navigator.clipboard.writeText(payload.text);
-      showToast('결과가 클립보드에 복사되었어요');
-    }catch(_){
-      alert('공유를 지원하지 않는 환경입니다. 결과를 수동으로 복사해 주세요.');
-    }
+      await navigator.share({ files: [file], title: '네,커피 핏팅 테스트 결과' });
+      return;
+    }catch(e){ /* 사용자가 취소했을 수 있음 → 폴백 진행 */ }
   }
+
+  // 폴백: 새 탭으로 이미지 열기 + 자동 다운로드 시도
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ne-coffee-result.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  // 새 탭 열기(모바일 일부 브라우저에서 다운로드 차단 시 대비)
+  window.open(dataUrl, '_blank');
 }
+shareBtn.addEventListener('click', shareCardImage);
 
-shareBtn.addEventListener('click', shareResult);
-</script>
-
-<script>
-// ===== 배너 6장 "중복 없이 순환" (세션 단위) =====
+/* ===== 배너 6장 "중복 없이 순환" (세션 단위) ===== */
 (function(){
   const imgEl = document.getElementById('bannerImg');
   if(!imgEl) return;
 
   const BANNERS = ['banner1.jpg','banner2.jpg','banner3.jpg','banner4.jpg','banner5.jpg','banner6.jpg'];
-
   // 프리로드
   BANNERS.forEach(src => { const i = new Image(); i.src = src; });
 
-  // 유틸: 섞기
   function shuffle(arr){
     const a = arr.slice();
     for(let i=a.length-1;i>0;i--){
@@ -629,27 +582,22 @@ shareBtn.addEventListener('click', shareResult);
     return a;
   }
 
-  // 저장된 순서/인덱스 불러오기
   let order = null;
   try { order = JSON.parse(sessionStorage.getItem('bannerOrder')||'null'); } catch(_){}
   let idx = parseInt(sessionStorage.getItem('bannerIndex')||'-1',10);
 
-  // 초기 상태: 순서 만들기
   if(!Array.isArray(order) || order.length !== BANNERS.length || order.some(x=>!BANNERS.includes(x))){
     order = shuffle(BANNERS);
     idx = -1;
   }
 
-  // 다음 배너 선택
   idx = (idx + 1) % order.length;
   const pick = order[idx];
 
-  // 화면 표시(페이드-인 옵션)
   imgEl.classList.add('fade-in');
   imgEl.addEventListener('load', ()=> imgEl.classList.add('loaded'), { once:true });
   imgEl.src = pick;
 
-  // alt 문구 매핑(선택)
   const altMap = {
     'banner1.jpg':'네,커피 — 햇살 드는 바 테이블',
     'banner2.jpg':'네,커피 — 우드톤 바리스타 존',
@@ -660,7 +608,6 @@ shareBtn.addEventListener('click', shareResult);
   };
   if (altMap[pick]) imgEl.alt = altMap[pick];
 
-  // 다음 로드를 위해 상태 저장
   if(idx === order.length - 1){
     sessionStorage.setItem('bannerOrder', JSON.stringify(shuffle(BANNERS)));
     sessionStorage.setItem('bannerIndex', '-1');
