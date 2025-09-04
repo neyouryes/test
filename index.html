@@ -137,7 +137,20 @@ body{
       <div class="banner-bottom">취향이 만나는 특별한 순간</div>
     </div>
   </div>
-
+<script>
+  const banners = [
+    "banner1.jpg",
+    "banner2.jpg",
+    "banner3.jpg",
+    "banner4.jpg",
+    "banner5.jpg",
+    "banner6.jpg"
+  ];
+  document.getElementById("banner-img").src =
+    banners[Math.floor(Math.random() * banners.length)];
+</script>
+</body>
+  
   <div class="card">
     <h1 class="title">네,커피 핏팅 테스트</h1>
     <p class="desc">5가지 질문에 답하면, 나에게 딱맞는 원두를 추천드려요.</p>
