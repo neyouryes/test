@@ -52,46 +52,22 @@ body{
 .mbti-rows { display: grid; gap: 12px; }
 .mbti-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
 .pair { 
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: 8px; 
-  border: 1px dashed var(--border);
-  border-radius: 10px; 
-  padding: 10px;
-  background: #fff;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; 
+  border: 1px dashed var(--border); border-radius: 10px; padding: 10px; background: #fff;
 }
-.pair-legend {
-  grid-column: 1 / -1;
-  font-size: .85rem;
-  color: var(--ink-2);
-  margin: -2px 0 4px;
-}
-@media (min-width: 560px){
-  .mbti-row { grid-template-columns: 1fr 1fr; }
-}
+.pair-legend { grid-column: 1 / -1; font-size: .85rem; color: var(--ink-2); margin: -2px 0 4px; }
+@media (min-width: 560px){ .mbti-row { grid-template-columns: 1fr 1fr; } }
 
 /* Q3: 색상 그라데이션 바 */
 .gradient-bar {
-  position: relative;
-  height: 40px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: linear-gradient(
-    to right,
-    #F5E08C, #F9D28E, #F6B48F, #E6A18F,
-    #F28C8C, #C3A6E8, #C9A588, #B58C8C
-  );
-  display: flex;
-  margin-top: 10px;
+  position: relative; height: 40px; border-radius: 10px; overflow: hidden;
+  background: linear-gradient(to right,#F5E08C,#F9D28E,#F6B48F,#E6A18F,#F28C8C,#C3A6E8,#C9A588,#B58C8C);
+  display:flex; margin-top:10px;
 }
-.gradient-bar label { flex:1; cursor:pointer; position:relative; }
-.gradient-bar input { display:none; }
-.gradient-bar span { display:block; width:100%; height:100%; }
-.gradient-bar input:checked + span {
-  outline: 3px solid var(--accent);
-  outline-offset: -3px;
-  border-radius: 4px;
-}
+.gradient-bar label{flex:1; cursor:pointer; position:relative}
+.gradient-bar input{display:none}
+.gradient-bar span{display:block; width:100%; height:100%}
+.gradient-bar input:checked + span{outline:3px solid var(--accent); outline-offset:-3px; border-radius:4px}
 
 /* 제출 바 */
 .submitbar{position:sticky;bottom:0;margin-top:12px;z-index:20}
@@ -103,10 +79,7 @@ body{
 /* 결과 모달 & 카드 */
 .result{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .result.show{display:flex}
-.result-card{
-  max-width:760px;width:100%;
-  background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;position:relative
-}
+.result-card{max-width:760px;width:100%;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;position:relative}
 .result-body{padding:18px 16px 20px;color:#2a1d18;position:relative}
 .result-title{font-size:1.5rem;margin:4px 0 6px;font-weight:800;text-align:center}
 .combo-title{font-size:1.05rem;color:#6a4b3b;margin:0 0 10px;font-weight:600;text-align:center}
@@ -118,49 +91,18 @@ body{
 .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .method-text{margin-top:14px;font-size:1rem;font-weight:500;color:#3b2a22;text-align:center}
 
-/* 공유용 푸터(이미지에 포함) */
-#share-footer {
-  margin-top: 18px;
-  padding-top: 8px;
-  border-top: 1px dashed var(--border);
-  font-size: .85rem;
-  text-align: center;
-  color: #6a4b3b;
-}
-#share-footer span {
-  display:block;
-  color:#3b2a22;
-  margin-top:2px;
-  word-break: break-all;
-}
-
-/* 하단 액션: 텍스트 링크 한 줄 */
+/* 하단 텍스트 액션 라인 */
 .actions-line{
-  margin-top: 12px;
-  text-align: center; /* 필요시 left/right로 변경 */
-  color: var(--ink-2);
-  user-select: none;
+  margin-top: 12px; text-align: center; color: var(--ink-2); user-select: none;
 }
 .actions-line a{
-  color: var(--accent);
-  text-decoration: none;
-  padding: 0 8px;
-  cursor: pointer;
-  font-size: .95rem;
+  color: var(--accent); text-decoration: none; padding: 0 8px; cursor: pointer; font-size: .95rem;
 }
-.actions-line a:hover,
-.actions-line a:focus{
-  text-decoration: underline;
-  outline: none;
-}
+.actions-line a:hover, .actions-line a:focus{ text-decoration: underline; outline: none; }
 
 /* 키보드 포커스 보조 */
-.opt input:focus-visible + label,
-.gradient-bar input:focus-visible + span,
-.actions-line a:focus-visible{
-  outline: 3px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 6px;
+.opt input:focus-visible + label, .gradient-bar input:focus-visible + span, .actions-line a:focus-visible{
+  outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px;
 }
 
 /* 모션 줄이기 */
@@ -306,16 +248,14 @@ body{
       <!-- 5. 추천 방식 결과 -->
       <p id="method-text" class="method-text"></p>
 
-      <!-- 공유용 푸터(이미지에 포함) -->
-      <div id="share-footer">
-        네,커피 핏팅 테스트
-        <span>https://linktr.ee/Ne.coffee</span>
-      </div>
-
-      <!-- 하단 텍스트 액션 라인 -->
-      <nav class="actions-line" aria-label="결과 작업">
+      <!-- 상단: 네,커피 바로 가기 (텍스트 링크) -->
+      <nav class="actions-line" aria-label="상단 링크">
         | <a id="goLink" href="https://linktr.ee/Ne.coffee" target="_blank" rel="noopener">네,커피 바로 가기</a> |
-        <a id="again" href="#">다시 하기</a> |
+      </nav>
+
+      <!-- 하단: 다시/공유/닫기 (텍스트 링크) -->
+      <nav class="actions-line" aria-label="결과 작업">
+        | <a id="again" href="#">다시 하기</a> |
         <a id="share" href="#">공유하기</a> |
         <a id="close" href="#">닫기</a> |
       </nav>
@@ -328,51 +268,43 @@ body{
 
 <script>
 /* ===== 데이터 세트 ===== */
-const TYPES={
-  A:{en:"Chance",ko:"행운",cup:"캬라멜, 로스트 아몬드",emoji:"🍀",color:"#F6B48F"},
-  B:{en:"Amante",ko:"연인",cup:"건자두, 레드와인",emoji:"❤️",color:"#C3A6E8"},
-  C:{en:"Lune",ko:"달",cup:"홍시, 캬라멜시럽",emoji:"🌙",color:"#F9D28E"},
-  D:{en:"Colombia El Diviso Washed",ko:"콜롬비아 워시드",cup:"라즈베리, 블루베리, 풍선껌",emoji:"🍓",color:"#F28C8C"},
-  E:{en:"Peru El Cedro Natural",ko:"페루 내추럴",cup:"사향벌꿀, 배과즙, 시나몬",emoji:"🍯",color:"#F5E08C"},
-  F:{en:"Rwanda Gitoki Washed",ko:"르완다 워시드",cup:"자두, 칵테일",emoji:"🍒",color:"#E6A18F"},
-  G:{en:"Cameroon Oku Natural",ko:"카메룬 내추럴",cup:"군밤, 찐고구마",emoji:"🌰",color:"#C9A588"},
-  H:{en:"Ethiopia Aricha Washed",ko:"에티오피아 워시드",cup:"다크 체리, 밀크 초콜렛",emoji:"🍫",color:"#B58C8C"}
-};
+const TYPES={A:{en:"Chance",ko:"행운",cup:"캬라멜, 로스트 아몬드",emoji:"🍀",color:"#F6B48F"},
+B:{en:"Amante",ko:"연인",cup:"건자두, 레드와인",emoji:"❤️",color:"#C3A6E8"},
+C:{en:"Lune",ko:"달",cup:"홍시, 캬라멜시럽",emoji:"🌙",color:"#F9D28E"},
+D:{en:"Colombia El Diviso Washed",ko:"콜롬비아 워시드",cup:"라즈베리, 블루베리, 풍선껌",emoji:"🍓",color:"#F28C8C"},
+E:{en:"Peru El Cedro Natural",ko:"페루 내추럴",cup:"사향벌꿀, 배과즙, 시나몬",emoji:"🍯",color:"#F5E08C"},
+F:{en:"Rwanda Gitoki Washed",ko:"르완다 워시드",cup:"자두, 칵테일",emoji:"🍒",color:"#E6A18F"},
+G:{en:"Cameroon Oku Natural",ko:"카메룬 내추럴",cup:"군밤, 찐고구마",emoji:"🌰",color:"#C9A588"},
+H:{en:"Ethiopia Aricha Washed",ko:"에티오피아 워시드",cup:"다크 체리, 밀크 초콜렛",emoji:"🍫",color:"#B58C8C"}};
 
-const COMBO_TITLES={
-  "A+B":"행운의 연인","A+C":"달빛 아래 행운","A+D":"운명의 모험","A+E":"황금빛 향연","A+F":"열정의 별빛","A+G":"따스한 행운","A+H":"달콤한 축복",
-  "B+C":"달빛 로망","B+D":"사랑의 항해","B+E":"꿀처럼 달콤한 사랑","B+F":"불꽃 같은 연정","B+G":"포근한 약속","B+H":"초콜릿 키스",
-  "C+D":"달과 열정의 여정","C+E":"달빛의 향기","C+F":"달의 불꽃","C+G":"따뜻한 달빛","C+H":"달밤의 속삭임",
-  "D+E":"과일빛 연가","D+F":"별빛 열정","D+G":"모험의 기억","D+H":"베리의 서정",
-  "E+F":"꿀빛 불꽃","E+G":"황금빛 온기","E+H":"달콤한 서약",
-  "F+G":"캠프파이어 로망스","F+H":"칵테일 키스",
-  "G+H":"겨울밤의 고백"
-};
+const COMBO_TITLES={"A+B":"행운의 연인","A+C":"달빛 아래 행운","A+D":"운명의 모험","A+E":"황금빛 향연","A+F":"열정의 별빛","A+G":"따스한 행운","A+H":"달콤한 축복",
+"B+C":"달빛 로망","B+D":"사랑의 항해","B+E":"꿀처럼 달콤한 사랑","B+F":"불꽃 같은 연정","B+G":"포근한 약속","B+H":"초콜릿 키스",
+"C+D":"달과 열정의 여정","C+E":"달빛의 향기","C+F":"달의 불꽃","C+G":"따뜻한 달빛","C+H":"달밤의 속삭임",
+"D+E":"과일빛 연가","D+F":"별빛 열정","D+G":"모험의 기억","D+H":"베리의 서정",
+"E+F":"꿀빛 불꽃","E+G":"황금빛 온기","E+H":"달콤한 서약",
+"F+G":"캠프파이어 로망스","F+H":"칵테일 키스",
+"G+H":"겨울밤의 고백"};
 
-const MBTI_TEMP={
-  ISTJ:{line:"질서 속의 평온, 따뜻한 컵이 하루를 단단하게 해줄 거예요.", temp:"hot"},
-  ISFJ:{line:"조용한 배려에 어울리는 온기, 부드럽게 스며드는 따뜻함을.", temp:"hot"},
-  INFJ:{line:"고요한 사색에 어울리는 온기, 마음을 감싸는 한 잔.", temp:"hot"},
-  INTJ:{line:"선명한 집중을 위한 따뜻함, 차분히 설계된 한 모금.", temp:"hot"},
-  ISTP:{line:"선택은 간결하게, 차갑게 깔끔한 한 잔이 딱.", temp:"ice"},
-  ISFP:{line:"감각에 스며드는 청량함, 차갑게 더 살아나는 순간들.", temp:"ice"},
-  INFP:{line:"섬세한 마음에 잔잔한 온기, 따뜻함이 오래 남아요.", temp:"hot"},
-  INTP:{line:"머릿속 흐름을 깨우는 시원함, 맑고 차가운 산뜻함.", temp:"ice"},
-  ESTP:{line:"지금 이 순간, 차갑게 터지는 리듬으로 속도를 올려요.", temp:"ice"},
-  ESFP:{line:"반짝이는 오늘, 시원함이 더 빛나게 해줄 거예요.", temp:"ice"},
-  ENFP:{line:"활기찬 스파크에 청량한 응답, 차갑게 식힌 한 잔으로!", temp:"ice"},
-  ENTP:{line:"아이디어의 파도를 타고, 크리스피한 시원함으로 전개하세요.", temp:"ice"},
-  ESTJ:{line:"명확한 결정을 돕는 온기, 단단하고 깔끔한 따뜻함.", temp:"hot"},
-  ESFJ:{line:"따뜻한 마음에 어울리는 온도, 부드럽게 함께 머무는 한 잔.", temp:"hot"},
-  ENFJ:{line:"사람과 순간을 잇는 온기, 마음을 데워주는 따뜻함.", temp:"hot"},
-  ENTJ:{line:"추진력을 위한 집중, 뜨겁게 정리되는 한 모금.", temp:"hot"}
-};
+const MBTI_TEMP={ISTJ:{line:"질서 속의 평온, 따뜻한 컵이 하루를 단단하게 해줄 거예요.", temp:"hot"},
+ISFJ:{line:"조용한 배려에 어울리는 온기, 부드럽게 스며드는 따뜻함을.", temp:"hot"},
+INFJ:{line:"고요한 사색에 어울리는 온기, 마음을 감싸는 한 잔.", temp:"hot"},
+INTJ:{line:"선명한 집중을 위한 따뜻함, 차분히 설계된 한 모금.", temp:"hot"},
+ISTP:{line:"선택은 간결하게, 차갑게 깔끔한 한 잔이 딱.", temp:"ice"},
+ISFP:{line:"감각에 스며드는 청량함, 차갑게 더 살아나는 순간들.", temp:"ice"},
+INFP:{line:"섬세한 마음에 잔잔한 온기, 따뜻함이 오래 남아요.", temp:"hot"},
+INTP:{line:"머릿속 흐름을 깨우는 시원함, 맑고 차가운 산뜻함.", temp:"ice"},
+ESTP:{line:"지금 이 순간, 차갑게 터지는 리듬으로 속도를 올려요.", temp:"ice"},
+ESFP:{line:"반짝이는 오늘, 시원함이 더 빛나게 해줄 거예요.", temp:"ice"},
+ENFP:{line:"활기찬 스파크에 청량한 응답, 차갑게 식힌 한 잔으로!", temp:"ice"},
+ENTP:{line:"아이디어의 파도를 타고, 크리스피한 시원함으로 전개하세요.", temp:"ice"},
+ESTJ:{line:"명확한 결정을 돕는 온기, 단단하고 깔끔한 따뜻함.", temp:"hot"},
+ESFJ:{line:"따뜻한 마음에 어울리는 온도, 부드럽게 함께 머무는 한 잔.", temp:"hot"},
+ENFJ:{line:"사람과 순간을 잇는 온기, 마음을 데워주는 따뜻함.", temp:"hot"},
+ENTJ:{line:"추진력을 위한 집중, 뜨겁게 정리되는 한 모금.", temp:"hot"}};
 
-const METHODS={
-  M1:{text:"아메리카노로 즐기세요. 진한 농도와 긴 여운이 당신의 몰입을 더 깊게 만들어줄 거예요."},
-  M2:{text:"핸드드립으로 즐기세요. 선명한 향미와 깔끔한 질감이 커피의 진심을 드러내줄 거예요."},
-  M3:{text:"콜드브루로 즐기세요. 부드럽고 달콤한 여운이 시원하게 하루를 바꿔줄 거예요."}
-};
+const METHODS={M1:{text:"아메리카노로 즐기세요. 진한 농도와 긴 여운이 당신의 몰입을 더 깊게 만들어줄 거예요."},
+M2:{text:"핸드드립으로 즐기세요. 선명한 향미와 깔끔한 질감이 커피의 진심을 드러내줄 거예요."},
+M3:{text:"콜드브루로 즐기세요. 부드럽고 달콤한 여운이 시원하게 하루를 바꿔줄 거예요."}};
 
 const METHOD_EMOJI={M1:"☕️",M2:"🍵",M3:"🥤"};
 const TEMP_EMOJI={hot:"🔥",ice:"❄️"};
@@ -400,7 +332,6 @@ function updateProgress(){
 form.addEventListener('change',updateProgress);updateProgress();
 
 function pairKey(a,b){return[a,b].sort().join('+');}
-function dot(hex){return`<span class="dot" style="background:${hex}"></span>`;}
 function getMBTI(){
   const ei=form.querySelector('input[name="mbti-ei"]:checked')?.value||'';
   const ns=form.querySelector('input[name="mbti-ns"]:checked')?.value||'';
@@ -422,22 +353,18 @@ function computeResult(){
   const ft=form.querySelector('input[name="mbti-ft"]:checked')?.value;
   const jp=form.querySelector('input[name="mbti-jp"]:checked')?.value;
 
-  // MBTI 보조 가중치(0.5씩)
   if(ei==="E"){totals.F+=0.5;totals.B+=0.5;} else if(ei==="I"){totals.A+=0.5;totals.C+=0.5;}
   if(ns==="N"){totals.D+=0.5;totals.E+=0.5;} else if(ns==="S"){totals.G+=0.5;totals.H+=0.5;}
   if(ft==="F"){totals.B+=0.5;totals.C+=0.5;} else if(ft==="T"){totals.A+=0.5;totals.D+=0.5;}
   if(jp==="J"){totals.F+=0.5;totals.H+=0.5;} else if(jp==="P"){totals.E+=0.5;totals.G+=0.5;}
 
-  // 동점 타이브레이커: Q2 > Q4 > Q3 > MBTI 미세가중 > 알파벳
   const base = Object.keys(totals).reduce((m,k)=>{ m[k]=0; return m; },{});
   const applyPriority=(name, weight)=>{
     const sel=form.querySelector(`input[name="${name}"]:checked`);
     if(!sel) return;
     sel.value.split("").forEach(l=>{ base[l]+=weight; });
   };
-  applyPriority('q2', 4);
-  applyPriority('q4', 3);
-  applyPriority('q3', 2);
+  applyPriority('q2', 4); applyPriority('q4', 3); applyPriority('q3', 2);
   if(ei){ (ei==="E"?['F','B']:['A','C']).forEach(l=> base[l]+=0.4); }
   if(ns){ (ns==="N"?['D','E']:['G','H']).forEach(l=> base[l]+=0.4); }
   if(ft){ (ft==="F"?['B','C']:['A','D']).forEach(l=> base[l]+=0.4); }
@@ -454,27 +381,23 @@ function computeResult(){
 
 function renderResult(){
   const {top1, top2} = computeResult();
-  const T1=TYPES[top1], T2=TYPES[top2];
+  const TYPES_MAP = TYPES;
+  const T1=TYPES_MAP[top1], T2=TYPES_MAP[top2];
 
-  // 타이틀
   const key=pairKey(top1,top2);
   const comboTitle=COMBO_TITLES[key] || `${T1.ko}와 ${T2.ko}의 조합`;
   document.getElementById('combo-title').textContent=comboTitle;
 
-  // MBTI 문구 + 온도
   const mbti=getMBTI();
   const mbtiMeta=MBTI_TEMP[mbti] || {line:"오늘의 커피가 당신에게 어울릴 거예요.", temp:"hot"};
   document.getElementById('mbti-line').textContent=mbtiMeta.line;
 
-  // 방식/이모지
   const methodKey=form.querySelector('input[name="method"]:checked')?.value||"M1";
-  const methodEmoji=METHOD_EMOJI[methodKey];
+  const methodEmoji={M1:"☕️",M2:"🍵",M3:"🥤"}[methodKey];
   const tempEmoji = (methodKey==="M3") ? "❄️" : (mbtiMeta.temp==="ice" ? "❄️" : "🔥");
 
-  // 이모지 라인
   document.getElementById('emoji-line').textContent = `${T1.emoji}${T2.emoji}${tempEmoji}${methodEmoji}`;
 
-  // 원두 카드
   const beanCards=document.getElementById('bean-cards');
   beanCards.innerHTML = `
     <div class="bean">
@@ -487,7 +410,6 @@ function renderResult(){
     </div>
   `;
 
-  // 방식 결과
   document.getElementById('method-text').textContent = METHODS[methodKey].text;
 }
 
@@ -546,14 +468,27 @@ submitBtn.addEventListener('click', ()=>{
 againLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); form.reset(); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); });
 closeLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); });
 
-/* ===== 결과 카드 이미지 공유 ===== */
+/* ===== 공유(이미지 하단에 링크 임시추가 → 캡처) ===== */
 async function shareCardImage(e){
   e.preventDefault();
+
+  // 1) 이미지 하단에 임시 공유 푸터 추가 (DOM에 표시되지만 캡처 직후 제거)
+  const tempFooter = document.createElement('div');
+  tempFooter.style.cssText = 'margin-top:18px;padding-top:8px;border-top:1px dashed #E7DED6;font-size:.85rem;text-align:center;color:#6a4b3b;';
+  tempFooter.innerHTML = `네,커피 핏팅 테스트<br><span style="display:block;color:#3b2a22;margin-top:2px;word-break:break-all;">https://linktr.ee/Ne.coffee</span>`;
+  resultCard.querySelector('.result-body').appendChild(tempFooter);
+
+  // 2) 캡처
   const canvas = await html2canvas(resultCard, {
     backgroundColor: '#ffffff',
     scale: window.devicePixelRatio < 2 ? 2 : window.devicePixelRatio,
     useCORS: true
   });
+
+  // 3) 임시 푸터 제거 (사용자 화면은 원래 상태 유지)
+  tempFooter.remove();
+
+  // 4) 공유/다운로드
   const dataUrl = canvas.toDataURL('image/png');
   const res = await fetch(dataUrl);
   const blob = await res.blob();
@@ -563,15 +498,12 @@ async function shareCardImage(e){
     try{
       await navigator.share({ files: [file], title: '네,커피 핏팅 테스트 결과' });
       return;
-    }catch(e){ /* 취소시 폴백 진행 */ }
+    }catch(e){ /* 취소 시 폴백 */ }
   }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'ne-coffee-result.png';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.href = url; a.download = 'ne-coffee-result.png';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   window.open(dataUrl, '_blank');
 }
 shareLink.addEventListener('click', shareCardImage);
