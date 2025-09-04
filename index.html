@@ -138,6 +138,26 @@ body{
 .banner img.fade-in { opacity: 0; transition: opacity .4s ease; }
 .banner img.fade-in.loaded { opacity: .8; }
 
+/* 토스트 */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  background: rgba(43,31,25,.96);
+  color:#fff;
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:.9rem;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  opacity:0; pointer-events:none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 100;
+}
+.toast.show {
+  opacity:1; transform: translateX(-50%) translateY(-4px);
+}
+
 /* 모바일 */
 @media (max-width:560px){
   body{font-size:14px;line-height:1.45}
@@ -277,6 +297,7 @@ body{
       <p id="method-text" class="method-text"></p>
 
       <div class="actions">
+        <button id="share" class="btn-secondary" type="button" aria-label="결과 공유하기">공유하기</button>
         <button id="first" class="first" type="button">첫화면으로</button>
         <button id="again" class="btn-secondary" type="button">다시 하기</button>
         <button id="close" class="close" type="button">닫기</button>
@@ -284,6 +305,9 @@ body{
     </div>
   </div>
 </div>
+
+<!-- 토스트 -->
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true">복사되었습니다</div>
 
 <script>
 /* ===== 데이터 세트 ===== */
@@ -369,6 +393,7 @@ function getMBTI(){
 }
 
 /* ===== 결과 생성 (타이브레이커 & 접근성 포함) ===== */
+let __lastResult = null; // 공유용으로 보관
 function computeResult(){
   // 점수 집계
   const totals={A:0,B:0,C:0,D:0,E:0,F:0,G:0,H:0};
@@ -408,6 +433,7 @@ function computeResult(){
     return a.localeCompare(b);
   });
   const top1=ordered[0], top2=ordered[1];
+  __lastResult = { top1, top2, ordered, totals }; // 저장
   return {top1, top2, totals};
 }
 
@@ -448,6 +474,11 @@ function renderResult(){
 
   // 방식 결과
   document.getElementById('method-text').textContent = METHODS[methodKey].text;
+
+  // 공유용 데이터 최신화
+  __lastResult.methodKey = methodKey;
+  __lastResult.mbti = mbti;
+  __lastResult.temp = (methodKey==="M3") ? "ICE" : (mbtiMeta.temp==="ice" ? "ICE" : "HOT");
 }
 
 /* ===== 모달 접근성/UX ===== */
@@ -455,6 +486,7 @@ const resultEl = document.getElementById('result');
 const firstBtn = document.getElementById('first');
 const againBtn = document.getElementById('again');
 const closeBtn = document.getElementById('close');
+const shareBtn = document.getElementById('share');
 let lastFocused = null;
 
 function lockScroll(lock){
@@ -522,6 +554,58 @@ updateProgress = function(){
   const width = prog.style.width || '0%';
   sr.textContent = `진행률 ${width}`;
 };
+
+/* ===== 공유하기 ===== */
+const toast = document.getElementById('toast');
+
+function showToast(msg='복사되었습니다'){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(()=> toast.classList.remove('show'), 1800);
+}
+
+function getSharePayload(){
+  const title = document.getElementById('combo-title').textContent.trim() || '네,커피 핏팅 테스트 결과';
+  const emoji = document.getElementById('emoji-line').textContent.trim();
+  const beanNodes = document.querySelectorAll('#bean-cards .bean-title');
+  const beans = Array.from(beanNodes).map(n=> n.textContent.trim()).join(' / ');
+  const method = document.getElementById('method-text').textContent.trim();
+  const url = location.href;
+
+  const textLines = [
+    `🌟 ${title}`,
+    ` ${emoji}`,
+    `원두: ${beans}`,
+    method,
+    `🔗 ${url}`
+  ];
+  return {
+    title,
+    text: textLines.join('\n')
+  };
+}
+
+async function shareResult(){
+  const payload = getSharePayload();
+  try{
+    if(navigator.share){
+      await navigator.share(payload);
+    }else{
+      await navigator.clipboard.writeText(payload.text);
+      showToast('결과가 클립보드에 복사되었어요');
+    }
+  }catch(e){
+    // 사용자가 취소했을 수 있음. 그래도 폴백 복사 시도
+    try{
+      await navigator.clipboard.writeText(payload.text);
+      showToast('결과가 클립보드에 복사되었어요');
+    }catch(_){
+      alert('공유를 지원하지 않는 환경입니다. 결과를 수동으로 복사해 주세요.');
+    }
+  }
+}
+
+shareBtn.addEventListener('click', shareResult);
 </script>
 
 <script>
