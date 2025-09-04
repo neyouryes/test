@@ -1,121 +1,40 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ne, Coffee Fitting Test</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --ink:#3B2A22; --ink-2:#5A4034; --accent:#6A4B3B;
-  --surface:rgba(255,255,255,.92); --border:#E7DED6;
-}
-*{box-sizing:border-box}
-body{
-  font-family:'Noto Serif KR', serif;
-  color:var(--ink); line-height:1.6;
-  background:#f7f2ef; margin:0; font-size:16px;
-}
-.wrap{max-width:860px;margin:0 auto;padding:0 16px 72px}
-.banner{position:relative;margin:0 -16px 12px;aspect-ratio:16/5;border-radius:16px;overflow:hidden;background:#000}
-.banner img{width:100%;height:100%;object-fit:cover;display:block;opacity:.8}
-.banner-text{position:absolute;bottom:14px;left:16px;display:flex;flex-direction:column;gap:2px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
-.banner-top{font-weight:700;font-size:1.6rem;line-height:1.2}
-.banner-bottom{font-size:0.9rem;opacity:.9}
-
-/* 카드 */
-.card{background:var(--surface);border-radius:16px;box-shadow:0 10px 30px rgba(59,42,34,.18);padding:16px;margin-top:10px;border:1px solid var(--border)}
-.title{margin:4px 0 2px;font-size:1.35rem;font-weight:700}
-.desc{margin:0 0 12px;color:var(--ink-2);font-size:.95rem}
-
-/* 문항 */
-.q{padding:12px 0;border-top:1px dashed var(--border)}
-.q:first-child{border-top:0}
-.q-title{font-size:1.05rem;margin:4px 0 8px;font-weight:700}
-.opts{display:grid;gap:8px}
-.opt{position:relative}
-.opt input{position:absolute;opacity:0;pointer-events:none}
-.opt label{
-  display:block;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer;
-  transition:box-shadow .15s ease,border-color .15s ease,transform .05s ease;
-}
-.opt label:active{transform:scale(.995)}
-.opt input:checked + label{border-color:var(--accent);box-shadow:0 0 0 2px rgba(106,75,59,.12) inset}
-
-/* MBTI 선택 */
-.mbti-simple div{display:flex;gap:8px;margin-bottom:6px}
-.mbti-simple label{
-  flex:1;display:block;background:#fff;border:1.5px solid var(--border);border-radius:12px;
-  padding:10px;text-align:center;cursor:pointer;transition:.2s;
-}
-.mbti-simple input{display:none}
-.mbti-simple input:checked + label{border-color:var(--accent);box-shadow:0 0 0 2px rgba(106,75,59,.12) inset}
-
-/* 색상 그라데이션 바 */
-.gradient-bar {
-  position: relative;
-  height: 40px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: linear-gradient(
-    to right,
-    #F5E08C, #F9D28E, #F6B48F, #E6A18F,
-    #F28C8C, #C3A6E8, #C9A588, #B58C8C
-  );
-  display: flex;
-  margin-top: 10px;
-}
-.gradient-bar label { flex:1; cursor:pointer; position:relative; }
-.gradient-bar input { display:none; }
-.gradient-bar span { display:block; width:100%; height:100%; }
-.gradient-bar input:checked + span {
-  outline: 3px solid var(--accent);
-  outline-offset: -3px;
-  border-radius: 4px;
-}
-
-/* 제출 바 */
-.submitbar{position:sticky;bottom:0;margin-top:12px;z-index:20}
-.submitcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(59,42,34,.18)}
-.progress{flex:1;height:8px;background:#efe6de;border-radius:999px;overflow:hidden}
-.progress > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#3b2a22);transition:width .3s ease}
-.btn{border:0;border-radius:12px;padding:10px 14px;font-size:.95rem;cursor:pointer;color:#fff;background:linear-gradient(180deg,#3b2a22,#2c1f19)}
-.btn[disabled]{opacity:.55;cursor:not-allowed}
-
-/* 결과 모달 */
-.result{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
-.result.show{display:flex}
-.result-card{max-width:760px;width:100%;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden}
-.result-body{padding:18px 16px 20px;color:#2a1d18}
-.result-title{font-size:1.5rem;margin:4px 0 6px;font-weight:800}
-.combo-title{font-size:1.05rem;color:#6a4b3b;margin:0 0 10px;font-weight:600}
-.emoji-line{text-align:center;font-size:1.35rem;margin:10px 0}
-.bean-cards{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-.bean{border:1px solid var(--border);border-radius:14px;padding:10px;background:#fefcfa;text-align:center}
-.bean-title{font-weight:700;font-size:1rem;margin:0}
-.bean-note{font-size:0.9rem;margin:4px 0 0}
-.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
-.method-text{margin-top:14px;font-size:1rem;font-weight:500;color:#3b2a22;text-align:center}
-.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
-.btn-secondary{background:#efe6de;color:#3b2a22;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
-.close{background:#3b2a22;color:#fff;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
-.first{background:#6a4b3b;color:#fff;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
-
-/* 모바일 */
-@media (max-width:560px){
-  body{font-size:14px;line-height:1.45}
-  .title{font-size:1.2rem}
-  .banner-top{font-size:1.2rem}
-  .banner-bottom{font-size:0.8rem}
-  .result-title{font-size:1.3rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Ne, Coffee Fitting Test</title>
+  <style>
+    body {margin:0;font-family:Arial, sans-serif;font-size:16px;line-height:1.5;background:#fafafa;color:#333;}
+    .wrap {max-width:600px;margin:0 auto;}
+    .banner {position:relative;width:100%;height:200px;overflow:hidden;}
+    .banner img {width:100%;height:100%;object-fit:cover;}
+    .banner-text {position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;background:rgba(0,0,0,0.3);}
+    .banner-top {font-size:24px;font-weight:bold;}
+    .banner-bottom {font-size:14px;margin-top:5px;}
+    h2 {font-size:20px;margin:20px 0 10px;}
+    label {display:block;margin:5px 0;cursor:pointer;}
+    input[type="radio"] {margin-right:6px;}
+    .mbti-q1 {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+    .color-options {display:flex;gap:10px;flex-wrap:wrap;}
+    .color-box {width:40px;height:40px;border-radius:50%;cursor:pointer;border:2px solid transparent;}
+    .color-box input {display:none;}
+    .color-box.selected {border:2px solid #333;}
+    .progress {width:100%;background:#eee;height:8px;border-radius:4px;margin:20px 0;}
+    #prog {height:8px;background:#333;width:0;border-radius:4px;}
+    button {padding:10px 20px;margin:10px 5px;border:none;border-radius:6px;background:#333;color:#fff;cursor:pointer;}
+    button:disabled {background:#aaa;}
+    /* 결과 모달 */
+    #result {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:100;}
+    #result.show {display:flex;}
+    .result-box {background:#fff;border-radius:10px;max-width:500px;padding:20px;text-align:center;}
+    .bean {margin:10px 0;}
+    .bean-title {font-weight:bold;}
+    .dot {display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;}
+    @media(max-width:480px){body{font-size:14px;}h2{font-size:18px;}.banner{height:150px;}.banner-top{font-size:18px;}}
+  </style>
 </head>
 <body>
 <div class="wrap">
-  <!-- ✅ 랜덤 배너 -->
   <div class="banner">
     <img id="banner-img" src="banner1.jpg" alt="배너">
     <div class="banner-text">
@@ -124,165 +43,172 @@ body{
     </div>
   </div>
 
-  <div class="card">
-    <h1 class="title">네,커피 핏팅 테스트</h1>
-    <p class="desc">5가지 질문에 답하면, 나에게 딱맞는 원두를 추천드려요.</p>
+  <form id="quiz">
+    <!-- Q1 MBTI -->
+    <h2>Q1. 당신의 MBTI 성향은?</h2>
+    <div class="mbti-q1">
+      <label><input type="radio" name="mbti-ei" value="E">E (외향형)</label>
+      <label><input type="radio" name="mbti-ei" value="I">I (내향형)</label>
+      <label><input type="radio" name="mbti-ns" value="N">N (직관형)</label>
+      <label><input type="radio" name="mbti-ns" value="S">S (감각형)</label>
+    </div>
+    <div class="mbti-q1">
+      <label><input type="radio" name="mbti-ft" value="F">F (감정형)</label>
+      <label><input type="radio" name="mbti-ft" value="T">T (사고형)</label>
+      <label><input type="radio" name="mbti-jp" value="J">J (판단형)</label>
+      <label><input type="radio" name="mbti-jp" value="P">P (인식형)</label>
+    </div>
 
-    <form id="quiz">
-     <!-- Q1. MBTI -->
-     <section class="q">
-      <div class="q-title">Q1. 나의 MBTI는?</div>
-      <div class="mbti-simple">
-        <div>
-          <input type="radio" id="ei-e" name="mbti-ei" value="E"><label for="ei-e">E (외향)</label>
-          <input type="radio" id="ei-i" name="mbti-ei" value="I"><label for="ei-i">I (내향)</label>
-        </div>
-        <div>
-          <input type="radio" id="ns-n" name="mbti-ns" value="N"><label for="ns-n">N (직관)</label>
-          <input type="radio" id="ns-s" name="mbti-ns" value="S"><label for="ns-s">S (감각)</label>
-        </div>
-        <div>
-          <input type="radio" id="ft-f" name="mbti-ft" value="F"><label for="ft-f">F (감정)</label>
-          <input type="radio" id="ft-t" name="mbti-ft" value="T"><label for="ft-t">T (사고)</label>
-        </div>
-        <div>
-          <input type="radio" id="jp-j" name="mbti-jp" value="J"><label for="jp-j">J (계획)</label>
-          <input type="radio" id="jp-p" name="mbti-jp" value="P"><label for="jp-p">P (인식)</label>
-        </div>
-      </div>
-     </section>
+    <!-- Q2 -->
+    <h2>Q2. 지금 마시고 싶은 분위기는?</h2>
+    <label><input type="radio" name="q2" value="AB">🍀 따뜻하고 편안한 순간</label>
+    <label><input type="radio" name="q2" value="CD">🍓 상쾌하고 선명한 순간</label>
+    <label><input type="radio" name="q2" value="EF">🍒 활기차고 열정적인 순간</label>
+    <label><input type="radio" name="q2" value="GH">🌰 고요하고 깊이 있는 순간</label>
 
-     <!-- Q2 -->
-     <section class="q">
-      <div class="q-title">Q2. 어떤 향미를 선호하시나요?</div>
-      <div class="opts">
-        <div class="opt"><input type="radio" id="q2a" name="q2" value="AB"><label for="q2a">플로럴, 시트러스 계열</label></div>
-        <div class="opt"><input type="radio" id="q2b" name="q2" value="CD"><label for="q2b">초콜릿, 너티 계열</label></div>
-        <div class="opt"><input type="radio" id="q2c" name="q2" value="EF"><label for="q2c">베리, 와인 계열</label></div>
-        <div class="opt"><input type="radio" id="q2d" name="q2" value="GH"><label for="q2d">밸런스형, 부드러움</label></div>
-      </div>
-     </section>
+    <!-- Q3 -->
+    <h2>Q3. 오늘 마음을 표현하는 색은?</h2>
+    <div class="color-options">
+      <label class="color-box" style="background:linear-gradient(45deg,#F6B48F,#F28C8C)"><input type="radio" name="q3" value="AD"></label>
+      <label class="color-box" style="background:linear-gradient(45deg,#C3A6E8,#F5E08C)"><input type="radio" name="q3" value="BE"></label>
+      <label class="color-box" style="background:linear-gradient(45deg,#F9D28E,#E6A18F)"><input type="radio" name="q3" value="CF"></label>
+      <label class="color-box" style="background:linear-gradient(45deg,#C9A588,#B58C8C)"><input type="radio" name="q3" value="GH"></label>
+    </div>
 
-     <!-- Q3 -->
-     <section class="q">
-      <div class="q-title">Q3. 선호하는 색감은?</div>
-      <div class="gradient-bar">
-        <label><input type="radio" name="q3" value="A"><span></span></label>
-        <label><input type="radio" name="q3" value="B"><span></span></label>
-        <label><input type="radio" name="q3" value="C"><span></span></label>
-        <label><input type="radio" name="q3" value="D"><span></span></label>
-        <label><input type="radio" name="q3" value="E"><span></span></label>
-        <label><input type="radio" name="q3" value="F"><span></span></label>
-        <label><input type="radio" name="q3" value="G"><span></span></label>
-        <label><input type="radio" name="q3" value="H"><span></span></label>
-      </div>
-     </section>
+    <!-- Q4 -->
+    <h2>Q4. 어떤 상황에서 즐기고 싶나요?</h2>
+    <label><input type="radio" name="q4" value="AC">🌙 혼자만의 휴식</label>
+    <label><input type="radio" name="q4" value="BD">❤️ 사랑하는 사람과 함께</label>
+    <label><input type="radio" name="q4" value="EF">🍒 열정적인 순간</label>
+    <label><input type="radio" name="q4" value="GH">🍫 조용한 몰입</label>
 
-     <!-- Q4 -->
-     <section class="q">
-      <div class="q-title">Q4. 오늘의 기분은?</div>
-      <div class="opts">
-        <div class="opt"><input type="radio" id="q4a" name="q4" value="AB"><label for="q4a">활기차고 에너지가 넘쳐요</label></div>
-        <div class="opt"><input type="radio" id="q4b" name="q4" value="CD"><label for="q4b">차분하고 집중하고 싶어요</label></div>
-        <div class="opt"><input type="radio" id="q4c" name="q4" value="EF"><label for="q4c">로맨틱하고 감성적이에요</label></div>
-        <div class="opt"><input type="radio" id="q4d" name="q4" value="GH"><label for="q4d">편안하게 휴식하고 싶어요</label></div>
-      </div>
-     </section>
+    <!-- Q5 -->
+    <h2>Q5. 어떤 방식이 어울릴까요?</h2>
+    <label><input type="radio" name="method" value="M1">☕ 깊고 진한 아메리카노</label>
+    <label><input type="radio" name="method" value="M2">🍵 향미가 선명한 핸드드립</label>
+    <label><input type="radio" name="method" value="M3">🥤 부드럽고 달콤한 콜드브루</label>
 
-     <!-- Q5 -->
-     <section class="q">
-      <div class="q-title">Q5. 어떤 방식의 커피를 즐기시나요?</div>
-      <div class="opts">
-        <div class="opt"><input type="radio" id="q5a" name="q5" value="americano"><label for="q5a">아메리카노 (진하고 균형감)</label></div>
-        <div class="opt"><input type="radio" id="q5b" name="q5" value="handdrip"><label for="q5b">핸드드립 (🍵 향미 선명, 깊이 즐김)</label></div>
-        <div class="opt"><input type="radio" id="q5c" name="q5" value="coldbrew"><label for="q5c">콜드브루 (부드럽고 단맛, 아이스 전용)</label></div>
-      </div>
-     </section>
-
-     <div class="submitbar">
-       <div class="submitcard">
-         <div class="progress"><span id="prog"></span></div>
-         <button type="submit" class="btn">결과 보기</button>
-       </div>
-     </div>
-    </form>
-  </div>
+    <div class="progress"><div id="prog"></div></div>
+    <button type="button" id="submit" disabled>결과 보기</button>
+  </form>
 </div>
 
 <!-- 결과 모달 -->
-<div class="result" id="result">
-  <div class="result-card">
-    <div class="result-body">
-      <h2 class="result-title">나의 원두 조합</h2>
-      <div class="combo-title" id="combo-title"></div>
-      <div class="emoji-line" id="emoji-line"></div>
-      <div class="bean-cards" id="bean-cards"></div>
-      <div class="method-text" id="method-text"></div>
-      <div class="method-text" id="mbti-text"></div>
-      <div class="actions">
-        <button class="btn-secondary" onclick="location.reload()">다시하기</button>
-        <button class="close" onclick="document.getElementById('result').classList.remove('show')">닫기</button>
-      </div>
-    </div>
+<div id="result">
+  <div class="result-box">
+    <h2 id="combo-title"></h2>
+    <p id="mbti-line"></p>
+    <p id="emoji-line"></p>
+    <div id="bean-cards"></div>
+    <p id="method-text"></p>
+    <button id="close">닫기</button>
+    <button id="again">다시하기</button>
+    <button id="first">처음으로</button>
   </div>
 </div>
 
+<!-- 랜덤 배너 -->
 <script>
-/* ✅ 랜덤 배너 */
-const banners = ["banner1.jpg","banner2.jpg","banner3.jpg","banner4.jpg","banner5.jpg","banner6.jpg"];
-document.getElementById("banner-img").src = banners[Math.floor(Math.random()*banners.length)];
+const banners=["banner1.jpg","banner2.jpg","banner3.jpg","banner4.jpg","banner5.jpg","banner6.jpg"];
+document.getElementById("banner-img").src=banners[Math.floor(Math.random()*banners.length)];
+</script>
 
-/* ✅ 원두 데이터 */
+<!-- 데이터 & 로직 (이전 버전 동일) -->
+<script>
+/* === 데이터 세트 / 함수 / 결과 생성 (생략 없이 동일) === */
+/* ===== 데이터 세트 ===== */
+// 원두 타입
 const TYPES={
-  A:{ko:"행운 블렌드", color:"#f28c8c", note:"🍊🌺🍫"},
-  B:{ko:"연인 블렌드", color:"#c3a6e8", note:"🍒❄️🥤"},
-  C:{ko:"달 블렌드", color:"#b58c8c", note:"🌙🍷🍫"},
-  D:{ko:"호깃 블렌드 (아주 긴 이름 예시)", color:"#f9d28e", note:"🍯🍏"},
-  E:{ko:"아침의 시작", color:"#f6b48f", note:"☀️🍞"},
-  F:{ko:"깊은 바다", color:"#c9a588", note:"🌊🍫"},
-  G:{ko:"숲의 휴식", color:"#6a8f3b", note:"🌲🍵"},
-  H:{ko:"밤의 고요", color:"#3b2a22", note:"🌌🍷"}
+  A:{en:"Chance",ko:"행운",cup:"캬라멜, 로스트 아몬드",emoji:"🍀",color:"#F6B48F"},
+  B:{en:"Amante",ko:"연인",cup:"건자두, 레드와인",emoji:"❤️",color:"#C3A6E8"},
+  C:{en:"Lune",ko:"달",cup:"홍시, 캬라멜시럽",emoji:"🌙",color:"#F9D28E"},
+  D:{en:"Colombia El Diviso Washed",ko:"콜롬비아 워시드",cup:"라즈베리, 블루베리, 풍선껌",emoji:"🍓",color:"#F28C8C"},
+  E:{en:"Peru El Cedro Natural",ko:"페루 내추럴",cup:"사향벌꿀, 배과즙, 시나몬",emoji:"🍯",color:"#F5E08C"},
+  F:{en:"Rwanda Gitoki Washed",ko:"르완다 워시드",cup:"자두, 칵테일",emoji:"🍒",color:"#E6A18F"},
+  G:{en:"Cameroon Oku Natural",ko:"카메룬 내추럴",cup:"군밤, 찐고구마",emoji:"🌰",color:"#C9A588"},
+  H:{en:"Ethiopia Aricha Washed",ko:"에티오피아 워시드",cup:"다크 체리, 밀크 초콜렛",emoji:"🍫",color:"#B58C8C"}
 };
 
-/* ✅ 조합 이름 */
+// 조합 타이틀
 const COMBO_TITLES={
-  "A+B":"밝고 사랑스러운 조합",
-  "C+D":"차분하고 지적인 조합",
-  "E+F":"풍부하고 깊은 조합",
-  "G+H":"편안하고 안정적인 조합"
+  "A+B":"행운의 연인","A+C":"달빛 아래 행운","A+D":"운명의 모험","A+E":"황금빛 향연","A+F":"열정의 별빛","A+G":"따스한 행운","A+H":"달콤한 축복",
+  "B+C":"달빛 로망","B+D":"사랑의 항해","B+E":"꿀처럼 달콤한 사랑","B+F":"불꽃 같은 연정","B+G":"포근한 약속","B+H":"초콜릿 키스",
+  "C+D":"달과 열정의 여정","C+E":"달빛의 향기","C+F":"달의 불꽃","C+G":"따뜻한 달빛","C+H":"달밤의 속삭임",
+  "D+E":"과일빛 연가","D+F":"별빛 열정","D+G":"모험의 기억","D+H":"베리의 서정",
+  "E+F":"꿀빛 불꽃","E+G":"황금빛 온기","E+H":"달콤한 서약",
+  "F+G":"캠프파이어 로망스","F+H":"칵테일 키스",
+  "G+H":"겨울밤의 고백"
 };
 
-/* ✅ MBTI 기반 온도 추천 */
+// MBTI 기반 문구 & 온도
 const MBTI_TEMP={
-  "E":"에너지를 나누는 당신에겐 아이스 커피가 잘 어울려요.",
-  "I":"내향적인 당신에겐 따뜻한 커피가 마음을 채워줄 거예요.",
-  "N":"새로움을 추구하는 당신에겐 아이스 커피가 잘 어울려요.",
-  "S":"감각적인 당신에겐 따뜻한 커피가 잘 어울려요.",
-  "F":"따뜻한 마음을 가진 당신, 따뜻한 커피가 더 어울려요.",
-  "T":"이성적인 당신, 시원한 아이스 커피가 잘 어울려요.",
-  "J":"계획적인 당신에겐 따뜻한 커피가 안정감을 줘요.",
-  "P":"자유로운 당신에겐 아이스 커피가 잘 어울려요."
+  ISTJ:{line:"질서 속의 평온, 따뜻한 컵이 하루를 단단하게 해줄 거예요.", temp:"hot"},
+  ISFJ:{line:"조용한 배려에 어울리는 온기, 부드럽게 스며드는 따뜻함을.", temp:"hot"},
+  INFJ:{line:"고요한 사색에 어울리는 온기, 마음을 감싸는 한 잔.", temp:"hot"},
+  INTJ:{line:"선명한 집중을 위한 따뜻함, 차분히 설계된 한 모금.", temp:"hot"},
+  ISTP:{line:"선택은 간결하게, 차갑게 깔끔한 한 잔이 딱.", temp:"ice"},
+  ISFP:{line:"감각에 스며드는 청량함, 차갑게 더 살아나는 순간들.", temp:"ice"},
+  INFP:{line:"섬세한 마음에 잔잔한 온기, 따뜻함이 오래 남아요.", temp:"hot"},
+  INTP:{line:"머릿속 흐름을 깨우는 시원함, 맑고 차가운 산뜻함.", temp:"ice"},
+  ESTP:{line:"지금 이 순간, 차갑게 터지는 리듬으로 속도를 올려요.", temp:"ice"},
+  ESFP:{line:"반짝이는 오늘, 시원함이 더 빛나게 해줄 거예요.", temp:"ice"},
+  ENFP:{line:"활기찬 스파크에 청량한 응답, 차갑게 식힌 한 잔으로!", temp:"ice"},
+  ENTP:{line:"아이디어의 파도를 타고, 크리스피한 시원함으로 전개하세요.", temp:"ice"},
+  ESTJ:{line:"명확한 결정을 돕는 온기, 단단하고 깔끔한 따뜻함.", temp:"hot"},
+  ESFJ:{line:"따뜻한 마음에 어울리는 온도, 부드럽게 함께 머무는 한 잔.", temp:"hot"},
+  ENFJ:{line:"사람과 순간을 잇는 온기, 마음을 데워주는 따뜻함.", temp:"hot"},
+  ENTJ:{line:"추진력을 위한 집중, 뜨겁게 정리되는 한 모금.", temp:"hot"}
 };
 
-/* ✅ 방식 추천 */
-const METHOD_TEXT={
-  americano:"진하고 균형감 있는 아메리카노가 오늘의 당신에게 잘 어울려요.",
-  handdrip:"향미가 선명한 핸드드립이 당신의 순간을 더욱 특별하게 해줄 거예요.",
-  coldbrew:"부드럽고 달콤한 콜드브루가 당신의 하루에 잘 어울려요."
+// 방식 (글귀만)
+const METHODS={
+  M1:{text:"아메리카노로 즐기세요. 진한 농도와 긴 여운이 당신의 몰입을 더 깊게 만들어줄 거예요."},
+  M2:{text:"핸드드립으로 즐기세요. 선명한 향미와 깔끔한 질감이 커피의 진심을 드러내줄 거예요."},
+  M3:{text:"콜드브루로 즐기세요. 부드럽고 달콤한 여운이 시원하게 하루를 바꿔줄 거예요."}
 };
+const METHOD_EMOJI={M1:"☕️",M2:"🍵",M3:"🥤"};
+const TEMP_EMOJI={hot:"🔥",ice:"❄️"};
 
-/* ✅ 제출 처리 */
+/* ===== 진행 관리 ===== */
 const form=document.getElementById('quiz');
-form.addEventListener('submit',e=>{
-  e.preventDefault(); showResult();
-});
+const submitBtn=document.getElementById('submit');
+const prog=document.getElementById('prog');
 
+function updateProgress(){
+  let count=0;const required=5;
+  const ei=form.querySelector('input[name="mbti-ei"]:checked');
+  const ns=form.querySelector('input[name="mbti-ns"]:checked');
+  const ft=form.querySelector('input[name="mbti-ft"]:checked');
+  const jp=form.querySelector('input[name="mbti-jp"]:checked');
+  if(ei&&ns&&ft&&jp)count++;
+  if(form.querySelector('input[name="q2"]:checked'))count++;
+  if(form.querySelector('input[name="q3"]:checked'))count++;
+  if(form.querySelector('input[name="q4"]:checked'))count++;
+  if(form.querySelector('input[name="method"]:checked'))count++;
+  const pct=Math.round((count/required)*100);
+  prog.style.width=pct+'%';
+  submitBtn.disabled=count!==required;
+}
+form.addEventListener('change',updateProgress);updateProgress();
+
+function pairKey(a,b){return[a,b].sort().join('+');}
+function dot(hex){return`<span class="dot" style="background:${hex}"></span>`;}
+function getMBTI(){
+  const ei=form.querySelector('input[name="mbti-ei"]:checked')?.value||'';
+  const ns=form.querySelector('input[name="mbti-ns"]:checked')?.value||'';
+  const ft=form.querySelector('input[name="mbti-ft"]:checked')?.value||'';
+  const jp=form.querySelector('input[name="mbti-jp"]:checked')?.value||'';
+  return ei+ns+ft+jp;
+}
+
+/* ===== 결과 생성 ===== */
 function showResult(){
   const totals={A:0,B:0,C:0,D:0,E:0,F:0,G:0,H:0};
   ["q2","q3","q4"].forEach(q=>{
     const sel=form.querySelector(`input[name="${q}"]:checked`);
-    if(sel) sel.value.split("").forEach(l=>totals[l]++);
+    if(sel){ sel.value.split("").forEach(l=>totals[l]++); }
   });
+
   const ei=form.querySelector('input[name="mbti-ei"]:checked')?.value;
   const ns=form.querySelector('input[name="mbti-ns"]:checked')?.value;
   const ft=form.querySelector('input[name="mbti-ft"]:checked')?.value;
@@ -296,33 +222,42 @@ function showResult(){
   const top1=ordered[0][0], top2=ordered[1][0];
   const T1=TYPES[top1], T2=TYPES[top2];
 
-  document.getElementById('combo-title').textContent=COMBO_TITLES[[top1,top2].sort().join('+')]||`${T1.ko}+${T2.ko}`;
-  document.getElementById('emoji-line').textContent=`${T1.note}${T2.note}☕️🔥`;
+  const key=pairKey(top1,top2);
+  const comboTitle=COMBO_TITLES[key] || `${T1.ko}와 ${T2.ko}의 조합`;
+  document.getElementById('combo-title').textContent=comboTitle;
 
-  const cards=document.getElementById('bean-cards');
-  cards.innerHTML=`<div class="bean"><div class="bean-title"><span class="dot" style="background:${T1.color}"></span>${T1.ko}</div><div class="bean-note">${T1.note}</div></div>
-                   <div class="bean"><div class="bean-title"><span class="dot" style="background:${T2.color}"></span>${T2.ko}</div><div class="bean-note">${T2.note}</div></div>`;
+  const mbti=getMBTI();
+  const mbtiMeta=MBTI_TEMP[mbti] || {line:"오늘의 커피가 당신에게 어울릴 거예요.", temp:"hot"};
+  document.getElementById('mbti-line').textContent=mbtiMeta.line;
 
-  const method=form.querySelector('input[name="q5"]:checked')?.value;
-  document.getElementById('method-text').textContent=METHOD_TEXT[method]||"";
-  let mbtiText="";
-  if(ei) mbtiText=MBTI_TEMP[ei]; if(ns) mbtiText=MBTI_TEMP[ns]; if(ft) mbtiText=MBTI_TEMP[ft]; if(jp) mbtiText=MBTI_TEMP[jp];
-  document.getElementById('mbti-text').textContent=mbtiText;
+  const methodKey=form.querySelector('input[name="method"]:checked')?.value||"M1";
+  const methodEmoji=METHOD_EMOJI[methodKey];
+  const tempEmoji = (methodKey==="M3") ? "❄️" : (mbtiMeta.temp==="ice" ? "❄️" : "🔥");
+
+  document.getElementById('emoji-line').textContent = `${T1.emoji}${T2.emoji}${tempEmoji}${methodEmoji}`;
+
+  const beanCards=document.getElementById('bean-cards');
+  beanCards.innerHTML = `
+    <div class="bean">
+      <p class="bean-title">${dot(T1.color)}${T1.ko} · ${T1.en}</p>
+      <p class="bean-note">${T1.cup}</p>
+    </div>
+    <div class="bean">
+      <p class="bean-title">${dot(T2.color)}${T2.ko} · ${T2.en}</p>
+      <p class="bean-note">${T2.cup}</p>
+    </div>
+  `;
+
+  document.getElementById('method-text').textContent = METHODS[methodKey].text;
 
   document.getElementById('result').classList.add('show');
 }
 
-/* ✅ 진행바 */
-const prog=document.getElementById('prog');
-form.addEventListener('change',()=>{
-  const total=5;
-  let answered=0;
-  ["mbti-ei","mbti-ns","mbti-ft","mbti-jp","q2","q3","q4","q5"].forEach(name=>{
-    if(form.querySelector(`input[name="${name}"]:checked`)) answered++;
-  });
-  const percent=Math.min(100,(answered/total)*100);
-  prog.style.width=percent+"%";
-});
+/* ===== 이벤트 ===== */
+submitBtn.addEventListener('click',showResult);
+document.getElementById('close').onclick=()=>document.getElementById('result').classList.remove('show');
+document.getElementById('again').onclick=()=>{document.getElementById('result').classList.remove('show');form.reset();updateProgress();};
+document.getElementById('first').onclick=()=>{document.getElementById('result').classList.remove('show');form.reset();updateProgress();window.scrollTo({top:0,behavior:'smooth'});};
 </script>
 </body>
 </html>
