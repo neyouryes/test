@@ -32,7 +32,16 @@ body{
 /* 카드 */
 .card{background:var(--surface);border-radius:16px;box-shadow:0 10px 30px rgba(59,42,34,.18);padding:18px;margin-top:10px;border:1px solid var(--border)}
 .title{margin:6px 0 4px;font-size:1.38rem;font-weight:700}
-.desc{margin:0 0 12px;color:var(--ink-2);font-size:.98rem}
+
+/* 설명 2줄 */
+.desc{
+  margin:0 0 12px;
+  color:var(--ink-2);
+  font-size:1rem;
+  line-height:1.9;
+  letter-spacing:.1px;
+}
+.desc .desc-line{display:inline}
 
 /* 문항 공통 */
 .q{padding:12px 0;border-top:1px dashed var(--border)}
@@ -74,6 +83,7 @@ body{
 .submitcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(59,42,34,.18)}
 .progress{flex:1;height:8px;background:#efe6de;border-radius:999px;overflow:hidden;position:relative}
 .progress > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#3b2a22);transition:width .3s ease}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-size:.95rem;cursor:pointer;color:#fff;background:linear-gradient(180deg,#3b2a22,#2c1f19)}
 .btn[disabled]{opacity:.55;cursor:not-allowed}
 
 /* 결과 모달 & 카드 */
@@ -125,7 +135,11 @@ body{
 
   <div class="card">
     <h1 class="title">네,커피 핏팅 테스트</h1>
-    <p class="desc">5가지 질문에 답하면, 당신에게 어울리는 원두 조합과 마시는 방식이 제안됩니다.</p>
+    <!-- 설명 2줄 -->
+    <p class="desc">
+      <span class="desc-line">5가지 질문에 답하면,</span><br>
+      <span class="desc-line">당신에게 어울리는 원두 조합과 마시는 방식이 제안됩니다.</span>
+    </p>
 
     <form id="quiz">
       <!-- Q1. MBTI (두 타입 × 2줄 레이아웃) -->
@@ -280,7 +294,7 @@ const COMBO_TITLES={
   "G+H":"겨울밤의 고백"
 };
 
-/* === MBTI 문구: 2줄(line1/line2) === */
+/* MBTI 문구 2줄 */
 const MBTI_TEMP={
   ISTJ:{line1:"질서 속의 평온,", line2:"따뜻한 컵이 하루를 단단하게 해줄 거예요.", temp:"hot"},
   ISFJ:{line1:"조용한 배려에 어울리는 온기,", line2:"부드럽게 스며드는 따뜻함을.", temp:"hot"},
@@ -300,19 +314,17 @@ const MBTI_TEMP={
   ENTJ:{line1:"추진력을 위한 집중,", line2:"뜨겁게 정리되는 한 모금.", temp:"hot"}
 };
 
-/* === 방식 문구도 2줄 === */
+/* 방식 문구 2줄 */
 const METHODS={
   M1:{line1:"아메리카노로 즐기세요.", line2:"진한 농도와 긴 여운이 몰입을 더 깊게 해줄 거예요."},
   M2:{line1:"핸드드립으로 즐기세요.", line2:"선명한 향미와 깔끔한 질감이 커피의 진심을 드러내줄 거예요."},
   M3:{line1:"콜드브루로 즐기세요.", line2:"부드럽고 달콤한 여운이 시원하게 하루를 바꿔줄 거예요."}
 };
-
 const METHOD_EMOJI={M1:"☕️",M2:"🍵",M3:"🥤"};
-const TEMP_EMOJI={hot:"❄️"/*not used here*/,ice:"❄️"};
 
 /* ===== 폼 진행/유틸 ===== */
 const form=document.getElementById('quiz');
-const submitBtn=document.getElementById('submit');
+const submitBtn=document.getElementById('submit'); /* ← 단 한 번만 선언 */
 const prog=document.getElementById('prog');
 
 function updateProgress(){
@@ -360,30 +372,24 @@ function computeResult(){
   if(jp==="J"){totals.F+=0.5;totals.H+=0.5;} else if(jp==="P"){totals.E+=0.5;totals.G+=0.5;}
 
   const base = Object.keys(totals).reduce((m,k)=>{ m[k]=0; return m; },{});
-  const applyPriority=(name, weight)=>{
-    const sel=form.querySelector(`input[name="${name}"]:checked`);
-    if(!sel) return;
-    sel.value.split("").forEach(l=>{ base[l]+=weight; });
-  };
-  applyPriority('q2', 4); applyPriority('q4', 3); applyPriority('q3', 2);
+  const apply=(name,w)=>{ const sel=form.querySelector(`input[name="${name}"]:checked`); if(!sel) return; sel.value.split("").forEach(l=>base[l]+=w); };
+  apply('q2',4); apply('q4',3); apply('q3',2);
   if(ei){ (ei==="E"?['F','B']:['A','C']).forEach(l=> base[l]+=0.4); }
   if(ns){ (ns==="N"?['D','E']:['G','H']).forEach(l=> base[l]+=0.4); }
   if(ft){ (ft==="F"?['B','C']:['A','D']).forEach(l=> base[l]+=0.4); }
   if(jp){ (jp==="J"?['F','H']:['E','G']).forEach(l=> base[l]+=0.4); }
 
   const ordered = Object.keys(totals).sort((a,b)=>{
-    if(totals[b] !== totals[a]) return totals[b]-totals[a];
-    if(base[b] !== base[a]) return base[b]-base[a];
+    if(totals[b]!==totals[a]) return totals[b]-totals[a];
+    if(base[b]!==base[a]) return base[b]-base[a];
     return a.localeCompare(b);
   });
-  const top1=ordered[0], top2=ordered[1];
-  return {top1, top2};
+  return {top1:ordered[0], top2:ordered[1]};
 }
 
 function renderResult(){
   const {top1, top2} = computeResult();
   const T1=TYPES[top1], T2=TYPES[top2];
-
   const key=pairKey(top1,top2);
   const comboTitle=COMBO_TITLES[key] || `${T1.ko}와 ${T2.ko}의 조합`;
   document.getElementById('combo-title').textContent=comboTitle;
@@ -436,7 +442,6 @@ function trapFocus(e){
 resultEl.addEventListener('click', (e)=>{ if(e.target===resultEl) hideModal(); });
 
 /* ===== 제출 ===== */
-const submitBtn=document.getElementById('submit');
 submitBtn.addEventListener('click', ()=>{
   const required = [
     ['mbti-ei','mbti-ns','mbti-ft','mbti-jp'],
@@ -454,11 +459,10 @@ submitBtn.addEventListener('click', ()=>{
 againLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); form.reset(); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); });
 closeLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); });
 
-/* ===== 공유: 이미지 + 텍스트/링크를 메시지에 첨부 ===== */
+/* ===== 공유: 이미지 + 텍스트/링크 ===== */
 async function shareCard(e){
   e.preventDefault();
-
-  // 1) 결과카드 캡처(이미지용)
+  // 1) 결과카드 캡처(이미지)
   const canvas = await html2canvas(resultCard, {
     backgroundColor: '#ffffff',
     scale: window.devicePixelRatio < 2 ? 2 : window.devicePixelRatio,
@@ -469,7 +473,7 @@ async function shareCard(e){
   const blob = await res.blob();
   const file = new File([blob], 'ne-coffee-result.png', { type: 'image/png' });
 
-  // 2) 메시지에 들어갈 텍스트(가독성 2줄)
+  // 2) 메시지 텍스트(2줄 문구 반영)
   const combo = document.getElementById('combo-title').textContent.trim();
   const mbtiLines = document.getElementById('mbti-line').innerText.trim();
   const methodLines = document.getElementById('method-text').innerText.trim();
@@ -479,32 +483,30 @@ ${mbtiLines}
 ${methodLines}
 
 네,커피 핏팅 테스트`;
-
   const shareUrl = 'https://linktr.ee/Ne.coffee';
 
   // 3) Web Share: 파일 + 텍스트 + URL
-  if (navigator.canShare && navigator.canShare({ files: [file], text: shareText, url: shareUrl })) {
+  if (navigator.canShare && navigator.canShare({ files:[file], text:shareText, url:shareUrl })) {
     try{
-      await navigator.share({ files:[file], text: shareText, url: shareUrl, title: '네,커피 핏팅 테스트 결과' });
+      await navigator.share({ files:[file], text:shareText, url:shareUrl, title:'네,커피 핏팅 테스트 결과' });
       return;
-    }catch(e){ /* 사용자가 취소했을 수 있음 → 폴백 */ }
+    }catch(e){}
   }
 
-  // 4) 파일 공유 미지원 → 텍스트+URL만 공유 시도
+  // 4) 파일 공유 미지원 → 텍스트+URL만
   if (navigator.share) {
     try{
-      await navigator.share({ text: shareText + '\n' + shareUrl, title: '네,커피 핏팅 테스트 결과' });
-      // 텍스트만 공유되므로 끝.
+      await navigator.share({ text: shareText + '\n' + shareUrl, title:'네,커피 핏팅 테스트 결과' });
       return;
-    }catch(e){ /* 취소 또는 실패 → 계속 폴백 */ }
+    }catch(e){}
   }
 
-  // 5) 최종 폴백: 링크 클립보드 + 이미지 다운로드/새탭
+  // 5) 폴백: 링크 복사 + 이미지 저장
   try {
     await navigator.clipboard.writeText(shareText + '\n' + shareUrl);
     alert('공유 문구와 링크를 클립보드에 복사했어요. 채팅창에 붙여넣기 해주세요.');
   } catch(_) {
-    alert('공유 문구를 복사하지 못했어요. 아래 새 창으로 열리는 이미지를 저장하고 링크는 수동으로 붙여넣어 주세요.');
+    alert('공유 문구 복사에 실패했어요. 이미지는 저장되고, 링크는 수동으로 붙여넣어 주세요.');
   }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -522,7 +524,7 @@ document.getElementById('share').addEventListener('click', shareCard);
   const BANNERS = ['banner1.jpg','banner2.jpg','banner3.jpg','banner4.jpg','banner5.jpg','banner6.jpg'];
   BANNERS.forEach(src => { const i = new Image(); i.src = src; });
 
-  function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.random()* (i+1) | 0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
   let order = null;
   try { order = JSON.parse(sessionStorage.getItem('bannerOrder')||'null'); } catch(_){}
