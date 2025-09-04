@@ -66,7 +66,15 @@ body{
 }
 .pair-legend { grid-column: 1 / -1; font-size: .85rem; color: var(--ink-2); margin: -2px 0 4px; }
 @media (min-width: 560px){ .mbti-row { grid-template-columns: 1fr 1fr; } }
-
+/* MBTI 구분 텍스트(E / I, N / S 등)를 가로 한 줄로 */
+.pair-legend {
+  grid-column: 1 / -1;
+  font-size: .85rem;
+  color: var(--ink-2);
+  margin: 0 0 6px;
+  text-align: center;
+  white-space: nowrap; /* 줄바꿈 방지 */
+}
 /* Q3: 색상 그라데이션 바 */
 .gradient-bar {
   position: relative; height: 40px; border-radius: 10px; overflow: hidden;
