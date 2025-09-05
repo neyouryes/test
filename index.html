@@ -47,7 +47,7 @@ body{
 .opt label:active{transform:scale(.995)}
 .opt input:checked + label{border-color:var(--accent);box-shadow:0 0 0 2px rgba(106,75,59,.12) inset}
 
-/* MBTI */
+/* MBTI (Q1) */
 .mbti-rows{display:grid;gap:12px}
 .mbti-row{display:grid;grid-template-columns:1fr;gap:12px}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;border:1px dashed var(--border);border-radius:10px;padding:10px;background:#fff}
@@ -56,6 +56,17 @@ body{
   margin:0 0 6px;text-align:center;white-space:nowrap; /* 한 줄 고정 */
 }
 @media(min-width:560px){.mbti-row{grid-template-columns:1fr 1fr}}
+
+/* Q3: 그라데이션 바 */
+.gradient-bar{
+  position:relative;height:40px;border-radius:10px;overflow:hidden;
+  background:linear-gradient(to right,#F5E08C,#F9D28E,#F6B48F,#E6A18F,#F28C8C,#C3A6E8,#C9A588,#B58C8C);
+  display:flex;margin-top:10px
+}
+.gradient-bar label{flex:1;cursor:pointer;position:relative}
+.gradient-bar input{display:none}
+.gradient-bar span{display:block;width:100%;height:100%}
+.gradient-bar input:checked + span{outline:3px solid var(--accent);outline-offset:-3px;border-radius:4px}
 
 /* 제출 바 */
 .submitbar{position:sticky;bottom:0;margin-top:12px;z-index:20}
@@ -73,11 +84,17 @@ body{
 .result-title{font-size:1.5rem;margin:4px 0 6px;font-weight:800;text-align:center}
 .combo-title{font-size:1.05rem;color:#6a4b3b;margin:0 0 10px;font-weight:600;text-align:center;line-height:1.9}
 .emoji-line{text-align:center;font-size:1.35rem;margin:10px 0}
+
+/* 원두 카드(결과) */
 .bean-cards{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-.bean{border:1px solid var(--border);border-radius:14px;padding:10px;background:#fefcfa}
-.bean-title{font-weight:700;font-size:1rem;margin:0}
-.bean-note{font-size:0.9rem;margin:4px 0 0}
-.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.bean{
+  border:1px solid var(--border);border-radius:14px;padding:12px;background:#fefcfa;text-align:center
+}
+.bean-title-en{font-weight:700;font-size:1rem;margin:0}
+.bean-title-ko{font-size:0.9rem;color:var(--ink-2);margin:2px 0 0}
+.bean-note{font-size:0.9rem;margin:6px 0 0}
+
+/* 방식 문구 */
 .method-text{margin-top:14px;font-size:1rem;font-weight:600;color:#3b2a22;text-align:center;line-height:1.9}
 
 /* 결과 액션 (텍스트 링크) */
@@ -146,18 +163,18 @@ body{
         </div>
       </section>
 
-      <!-- Q3. 색상 -->
+      <!-- Q3. 색상 (그라데이션 바) -->
       <section class="q" aria-labelledby="q3-label">
         <div id="q3-label" class="q-title">Q3. 내가 좋아하는 커피의 색감은?</div>
-        <div class="opts">
-          <div class="opt"><input id="q3-1" type="radio" name="q3" value="E"><label for="q3-1">밝은 골드톤</label></div>
-          <div class="opt"><input id="q3-2" type="radio" name="q3" value="C"><label for="q3-2">은은한 옐로우톤</label></div>
-          <div class="opt"><input id="q3-3" type="radio" name="q3" value="A"><label for="q3-3">부드러운 오렌지톤</label></div>
-          <div class="opt"><input id="q3-4" type="radio" name="q3" value="F"><label for="q3-4">따뜻한 브라운톤</label></div>
-          <div class="opt"><input id="q3-5" type="radio" name="q3" value="D"><label for="q3-5">강렬한 레드톤</label></div>
-          <div class="opt"><input id="q3-6" type="radio" name="q3" value="B"><label for="q3-6">로맨틱 퍼플톤</label></div>
-          <div class="opt"><input id="q3-7" type="radio" name="q3" value="G"><label for="q3-7">따스한 베이지톤</label></div>
-          <div class="opt"><input id="q3-8" type="radio" name="q3" value="H"><label for="q3-8">다크 초콜릿톤</label></div>
+        <div class="gradient-bar" role="radiogroup" aria-labelledby="q3-label">
+          <label><input type="radio" name="q3" value="E" aria-label="밝은 꿀빛 계열"><span></span></label>
+          <label><input type="radio" name="q3" value="C" aria-label="연한 카라멜톤"><span></span></label>
+          <label><input type="radio" name="q3" value="A" aria-label="살구빛 로스티"><span></span></label>
+          <label><input type="radio" name="q3" value="F" aria-label="웜 로즈톤"><span></span></label>
+          <label><input type="radio" name="q3" value="D" aria-label="핑크빛 베리톤"><span></span></label>
+          <label><input type="radio" name="q3" value="B" aria-label="라일락 초콜릿톤"><span></span></label>
+          <label><input type="radio" name="q3" value="G" aria-label="고동 계열"><span></span></label>
+          <label><input type="radio" name="q3" value="H" aria-label="다크 카카오톤"><span></span></label>
         </div>
       </section>
 
@@ -202,11 +219,11 @@ body{
       <div id="bean-cards" class="bean-cards"></div>
       <p id="method-text" class="method-text"></p>
 
-      <!-- 상단 링크 -->
+      <!-- 상단: 네,커피 바로 가기 -->
       <nav class="actions-line" aria-label="상단 링크">
         | <a id="goLink" href="https://linktr.ee/Ne.coffee" target="_blank" rel="noopener">네,커피 바로 가기</a> |
       </nav>
-      <!-- 하단 링크 -->
+      <!-- 하단: 다시/공유/닫기 -->
       <nav class="actions-line" aria-label="결과 작업">
         | <a id="again" href="#">다시 하기</a> |
         <a id="share" href="#">공유하기</a> |
@@ -242,7 +259,7 @@ const COMBO_TITLES={
   "G+H":"겨울밤의 고백"
 };
 
-/* MBTI 문구 (2줄) + 온도 추천 */
+/* MBTI 문구(2줄) + 온도 추천 */
 const MBTI_TEMP={
   ISTJ:{line1:"질서 속의 평온,", line2:"따뜻한 컵이 하루를 단단하게 해줄 거예요.", temp:"hot"},
   ISFJ:{line1:"조용한 배려에 어울리는 온기,", line2:"부드럽게 스며드는 따뜻함을.", temp:"hot"},
@@ -262,7 +279,7 @@ const MBTI_TEMP={
   ENTJ:{line1:"추진력을 위한 집중,", line2:"뜨겁게 정리되는 한 모금.", temp:"hot"}
 };
 
-/* 방식 문구도 2줄 */
+/* 방식 문구(2줄) */
 const METHODS={
   M1:{line1:"아메리카노로 즐기세요.", line2:"진한 농도와 긴 여운이 몰입을 더 깊게 해줄 거예요."},
   M2:{line1:"핸드드립으로 즐기세요.", line2:"선명한 향미와 깔끔한 질감이 커피의 진심을 드러내줄 거예요."},
@@ -270,7 +287,7 @@ const METHODS={
 };
 const METHOD_EMOJI={M1:"☕️",M2:"🍵",M3:"🥤"};
 
-/* ===== 유틸 ===== */
+/* ===== 진행/유틸 ===== */
 const form=document.getElementById('quiz');
 const submitBtn=document.getElementById('submit');
 const prog=document.getElementById('prog');
@@ -301,7 +318,7 @@ function getMBTI(){
   return ei+ns+ft+jp;
 }
 
-/* ===== 결과 계산/렌더 ===== */
+/* ===== 결과 생성 ===== */
 function computeResult(){
   const totals={A:0,B:0,C:0,D:0,E:0,F:0,G:0,H:0};
   ["q2","q3","q4"].forEach(q=>{
@@ -317,7 +334,7 @@ function computeResult(){
   if(ft==="F"){totals.B+=0.5;totals.C+=0.5;} else if(ft==="T"){totals.A+=0.5;totals.D+=0.5;}
   if(jp==="J"){totals.F+=0.5;totals.H+=0.5;} else if(jp==="P"){totals.E+=0.5;totals.G+=0.5;}
 
-  // 동점 타이브레이커(중요도 우선순위)
+  // 동점 타이브레이커: 질문 중요도 기반
   const base = Object.keys(totals).reduce((m,k)=>{ m[k]=0; return m; },{});
   const apply=(name,w)=>{ const sel=form.querySelector(`input[name="${name}"]:checked`); if(!sel) return; sel.value.split("").forEach(l=>base[l]+=w); };
   apply('q2',4); apply('q4',3); apply('q3',2);
@@ -347,17 +364,23 @@ function renderResult(){
   const methodKey=form.querySelector('input[name="method"]:checked')?.value||"M1";
   const tempEmoji = (methodKey==="M3") ? "❄️" : (meta.temp==="ice" ? "❄️" : "🔥");
   const methodEmoji = METHOD_EMOJI[methodKey];
-
   document.getElementById('emoji-line').textContent = `${T1.emoji}${T2.emoji}${tempEmoji}${methodEmoji}`;
 
+  // 원두 카드 렌더
   const beanCards=document.getElementById('bean-cards');
+  const koLine = key => {
+    // A/B/C는 한글만, D~H는 한글명(워시드/내추럴 포함 그대로)
+    return TYPES[key].ko;
+  };
   beanCards.innerHTML = `
     <div class="bean">
-      <p class="bean-title"><span class="dot" style="background:${T1.color}"></span>${T1.ko} · ${T1.en}</p>
+      <p class="bean-title-en">${T1.en}</p>
+      <p class="bean-title-ko">${koLine(top1)}</p>
       <p class="bean-note">${T1.cup}</p>
     </div>
     <div class="bean">
-      <p class="bean-title"><span class="dot" style="background:${T2.color}"></span>${T2.ko} · ${T2.en}</p>
+      <p class="bean-title-en">${T2.en}</p>
+      <p class="bean-title-ko">${koLine(top2)}</p>
       <p class="bean-note">${T2.cup}</p>
     </div>
   `;
@@ -387,15 +410,13 @@ submitBtn.addEventListener('click', ()=>{
   if(!ok){ alert('모든 문항을 선택해주세요.'); return; }
   renderResult(); showModal();
 });
-
 againLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); form.reset(); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); });
 closeLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); });
 
-/* ===== 공유: 이미지 + 텍스트(테스트 링크만) ===== */
+/* ===== 공유: 카드 이미지 + 텍스트(테스트 링크만) ===== */
 async function shareCard(e){
   e.preventDefault();
 
-  // 결과카드 → 이미지
   const canvas = await html2canvas(document.getElementById('resultCard'), {
     backgroundColor: '#ffffff',
     scale: Math.max(2, window.devicePixelRatio || 1),
@@ -405,33 +426,25 @@ async function shareCard(e){
   const blob = await (await fetch(dataUrl)).blob();
   const file = new File([blob], 'ne-coffee-result.png', { type: 'image/png', lastModified: Date.now() });
 
-  const shareTextOnlyLink = 'https://pittingtest.netlify.app'; // ← 텍스트는 링크만
+  const shareTextOnlyLink = 'https://pittingtest.netlify.app'; // 텍스트는 링크만
 
-  // 파일 + 텍스트(링크)만 전송 (url 파라미터 생략)
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
       await navigator.share({
         files: [file],
         text: shareTextOnlyLink,
         title: '네,커피 핏팅 테스트'
+        // url은 의도적으로 제외
       });
       return;
     } catch (_) {}
   }
-
-  // 파일 공유 미지원 → 텍스트(링크)만
   if (navigator.share) {
     try {
-      await navigator.share({
-        text: shareTextOnlyLink,
-        title: '네,커피 핏팅 테스트'
-      });
-      // 이미지 저장 안내는 폴백에서 처리
+      await navigator.share({ text: shareTextOnlyLink, title: '네,커피 핏팅 테스트' });
       return;
     } catch (_) {}
   }
-
-  // 최후 폴백: 링크 복사 + 이미지 저장
   try {
     await navigator.clipboard.writeText(shareTextOnlyLink);
     alert('테스트 링크를 클립보드에 복사했어요. 채팅창에 붙여넣기 해주세요.');
@@ -446,14 +459,17 @@ async function shareCard(e){
 }
 shareLink.addEventListener('click', shareCard);
 
-/* ===== 배너 6장 순환 (무작위 시작) ===== */
+/* ===== 배너: 방문 시 랜덤 1장 선택(세션 동안 고정) ===== */
 (function(){
   const imgEl = document.getElementById('bannerImg');
   const BANNERS = ['banner1.jpg','banner2.jpg','banner3.jpg','banner4.jpg','banner5.jpg','banner6.jpg'];
-  // 무작위 시작 인덱스
-  let i = Math.floor(Math.random() * BANNERS.length);
-  imgEl.src = BANNERS[i];
-  setInterval(()=>{ i = (i+1)%BANNERS.length; imgEl.style.opacity=.3; setTimeout(()=>{ imgEl.src=BANNERS[i]; imgEl.style.opacity=.82; },100); }, 4000);
+  const pick = BANNERS[Math.floor(Math.random()*BANNERS.length)];
+  // 프리로드(선택)
+  const pre = new Image(); pre.src = pick;
+  imgEl.style.opacity = .3;
+  pre.onload = ()=>{ imgEl.src = pick; imgEl.style.opacity = .82; };
+  // onload 타이밍 이슈 대비
+  setTimeout(()=>{ imgEl.src = pick; imgEl.style.opacity = .82; }, 80);
 })();
 </script>
 </body>
