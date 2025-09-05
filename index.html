@@ -20,7 +20,7 @@ body{
 }
 .wrap{max-width:860px;margin:0 auto;padding:0 16px 72px}
 
- .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
   
 /* 배너 */
 .banner{position:relative;margin:0 -16px 12px;aspect-ratio:16/5;border-radius:16px;overflow:hidden;background:#000}
@@ -290,11 +290,21 @@ const MBTI_TEMP={
   ENTJ:{line1:"추진력을 위한 집중,", line2:"뜨겁게 정리되는 한 모금.", temp:"hot"}
 };
 
-/* 방식 문구(2줄) */
+/* 방식 문구(2줄/3줄) — ★문법 오류 수정 완료 */
 const METHODS={
-  M1:{line1:"아메리카노로 즐기세요.", line2:"진한 농도와 긴 여운이 몰입을 더 깊게 해줄 거예요."},
-  M2:{line1:"핸드드립으로 즐기세요.", line2:"선명한 향미와 깔끔한 질감이"},line3:"커피의 진심을 드러내줄 거예요."},
-  M3:{line1:"콜드브루로 즐기세요.", line2:"부드럽고 달콤한 여운이 시원하게 하루를 바꿔줄 거예요."}
+  M1:{
+    line1:"아메리카노로 즐기세요.",
+    line2:"진한 농도와 긴 여운이 몰입을 더 깊게 해줄 거예요."
+  },
+  M2:{
+    line1:"핸드드립으로 즐기세요.",
+    line2:"선명한 향미와 깔끔한 질감이",
+    line3:"커피의 진심을 드러내줄 거예요."
+  },
+  M3:{
+    line1:"콜드브루로 즐기세요.",
+    line2:"부드럽고 달콤한 여운이 시원하게 하루를 바꿔줄 거예요."
+  }
 };
 const METHOD_EMOJI={M1:"☕️",M2:"🍵",M3:"🥤"};
 
@@ -378,30 +388,31 @@ function renderResult(){
   document.getElementById('emoji-line').textContent = `${T1.emoji}${T2.emoji}${tempEmoji}${methodEmoji}`;
 
   // 원두 카드 렌더
-const beanCards=document.getElementById('bean-cards');
-const koLine = key => TYPES[key].ko; // A/B/C는 한글만, D~H는 워시드/내추럴 포함
+  const beanCards=document.getElementById('bean-cards');
+  const koLine = key => TYPES[key].ko; // A/B/C는 한글만, D~H는 워시드/내추럴 포함
+  beanCards.innerHTML = `
+    <div class="bean">
+      <p class="bean-title-en">
+        <span class="dot" style="background:${TYPES[top1].color}"></span>${TYPES[top1].en}
+      </p>
+      <p class="bean-title-ko">${koLine(top1)}</p>
+      <p class="bean-note">${TYPES[top1].cup}</p>
+    </div>
+    <div class="bean">
+      <p class="bean-title-en">
+        <span class="dot" style="background:${TYPES[top2].color}"></span>${TYPES[top2].en}
+      </p>
+      <p class="bean-title-ko">${koLine(top2)}</p>
+      <p class="bean-note">${TYPES[top2].cup}</p>
+    </div>
+  `;
 
-beanCards.innerHTML = `
-  <div class="bean">
-    <p class="bean-title-en">
-      <span class="dot" style="background:${TYPES[top1].color}"></span>${TYPES[top1].en}
-    </p>
-    <p class="bean-title-ko">${koLine(top1)}</p>
-    <p class="bean-note">${TYPES[top1].cup}</p>
-  </div>
-  <div class="bean">
-    <p class="bean-title-en">
-      <span class="dot" style="background:${TYPES[top2].color}"></span>${TYPES[top2].en}
-    </p>
-    <p class="bean-title-ko">${koLine(top2)}</p>
-    <p class="bean-note">${TYPES[top2].cup}</p>
-  </div>
-`;
-  
+  // 방식 문구(2~3줄 안전 처리) — ★수정
   const m = METHODS[methodKey];
-let methodHtml = `${m.line1}<br>${m.line2}`;
-if(m.line3){ methodHtml += `<br>${m.line3}`; }
-document.getElementById('method-text').innerHTML = methodHtml;
+  let methodHtml = `${m.line1}<br>${m.line2}`;
+  if(m.line3){ methodHtml += `<br>${m.line3}`; }
+  document.getElementById('method-text').innerHTML = methodHtml;
+}
 
 /* ===== 모달 제어 ===== */
 const resultEl = document.getElementById('result');
