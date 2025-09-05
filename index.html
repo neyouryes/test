@@ -22,9 +22,7 @@ body{
 
 /* 배너 */
 .banner{position:relative;margin:0 -16px 12px;aspect-ratio:16/5;border-radius:16px;overflow:hidden;background:#000}
-.banner img{width:100%;height:100%;object-fit:cover;display:block;opacity:.82}
-.banner img.fade-in{opacity:0;transition:opacity .4s ease}
-.banner img.fade-in.loaded{opacity:.82}
+.banner img{width:100%;height:100%;object-fit:cover;display:block;opacity:.82;transition:opacity .4s ease}
 .banner-text{position:absolute;bottom:14px;left:16px;display:flex;flex-direction:column;gap:2px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
 .banner-top{font-weight:700;font-size:1.6rem;line-height:1.2}
 .banner-bottom{font-size:0.9rem;opacity:.9}
@@ -32,21 +30,13 @@ body{
 /* 카드 */
 .card{background:var(--surface);border-radius:16px;box-shadow:0 10px 30px rgba(59,42,34,.18);padding:18px;margin-top:10px;border:1px solid var(--border)}
 .title{margin:6px 0 4px;font-size:1.38rem;font-weight:700}
-
-/* 설명 2줄 */
-.desc{
-  margin:0 0 12px;
-  color:var(--ink-2);
-  font-size:1rem;
-  line-height:1.9;
-  letter-spacing:.1px;
-}
+.desc{margin:0 0 12px;color:var(--ink-2);font-size:1rem;line-height:1.9;letter-spacing:.1px}
 .desc .desc-line{display:inline}
 
-/* 문항 공통 */
+/* 문항 */
 .q{padding:12px 0;border-top:1px dashed var(--border)}
 .q:first-child{border-top:0}
-.q-title{font-size:1.06rem;margin:4px 0 8px;font-weight:700}
+.q-title{font-size:1.05rem;margin:4px 0 8px;font-weight:700}
 .opts{display:grid;gap:8px}
 .opt{position:relative}
 .opt input{position:absolute;opacity:0;pointer-events:none}
@@ -57,78 +47,43 @@ body{
 .opt label:active{transform:scale(.995)}
 .opt input:checked + label{border-color:var(--accent);box-shadow:0 0 0 2px rgba(106,75,59,.12) inset}
 
-/* Q1: 두 타입 × 2줄 레이아웃 */
-.mbti-rows { display: grid; gap: 12px; }
-.mbti-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
-.pair { 
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; 
-  border: 1px dashed var(--border); border-radius: 10px; padding: 10px; background: #fff;
+/* MBTI */
+.mbti-rows{display:grid;gap:12px}
+.mbti-row{display:grid;grid-template-columns:1fr;gap:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;border:1px dashed var(--border);border-radius:10px;padding:10px;background:#fff}
+.pair-legend{
+  grid-column:1/-1;font-size:.85rem;color:var(--ink-2);
+  margin:0 0 6px;text-align:center;white-space:nowrap; /* 한 줄 고정 */
 }
-.pair-legend { grid-column: 1 / -1; font-size: .85rem; color: var(--ink-2); margin: -2px 0 4px; }
-@media (min-width: 560px){ .mbti-row { grid-template-columns: 1fr 1fr; } }
-/* MBTI 구분 텍스트(E / I, N / S 등)를 가로 한 줄로 */
-.pair-legend {
-  grid-column: 1 / -1;
-  font-size: .85rem;
-  color: var(--ink-2);
-  margin: 0 0 6px;
-  text-align: center;
-  white-space: nowrap; /* 줄바꿈 방지 */
-}
-/* Q3: 색상 그라데이션 바 */
-.gradient-bar {
-  position: relative; height: 40px; border-radius: 10px; overflow: hidden;
-  background: linear-gradient(to right,#F5E08C,#F9D28E,#F6B48F,#E6A18F,#F28C8C,#C3A6E8,#C9A588,#B58C8C);
-  display:flex; margin-top:10px;
-}
-.gradient-bar label{flex:1; cursor:pointer; position:relative}
-.gradient-bar input{display:none}
-.gradient-bar span{display:block; width:100%; height:100%}
-.gradient-bar input:checked + span{outline:3px solid var(--accent); outline-offset:-3px; border-radius:4px}
+@media(min-width:560px){.mbti-row{grid-template-columns:1fr 1fr}}
 
 /* 제출 바 */
 .submitbar{position:sticky;bottom:0;margin-top:12px;z-index:20}
 .submitcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(59,42,34,.18)}
-.progress{flex:1;height:8px;background:#efe6de;border-radius:999px;overflow:hidden;position:relative}
+.progress{flex:1;height:8px;background:#efe6de;border-radius:999px;overflow:hidden}
 .progress > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#3b2a22);transition:width .3s ease}
 .btn{border:0;border-radius:12px;padding:10px 14px;font-size:.95rem;cursor:pointer;color:#fff;background:linear-gradient(180deg,#3b2a22,#2c1f19)}
 .btn[disabled]{opacity:.55;cursor:not-allowed}
 
-/* 결과 모달 & 카드 */
+/* 결과 모달 */
 .result{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .result.show{display:flex}
-.result-card{max-width:760px;width:100%;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;position:relative}
-.result-body{padding:20px 16px;color:#2a1d18}
-.result-title{font-size:1.52rem;margin:2px 0 8px;font-weight:800;text-align:center;letter-spacing:.2px}
-.combo-title{font-size:1.02rem;color:#6a4b3b;margin:10px auto 8px;font-weight:600;text-align:center;line-height:1.9}
-.emoji-line{text-align:center;font-size:1.38rem;margin:8px 0 14px}
-.bean-cards{display:flex;flex-direction:column;gap:12px;margin-top:4px}
-.bean{
-  border:1px solid var(--border);border-radius:14px;padding:12px 12px;background:#fefcfa;
-}
-.bean-title{font-weight:700;font-size:1rem;margin:0 0 4px}
-.bean-note{font-size:0.94rem;margin:0;color:#5A4034}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle;transform:translateY(-1px)}
-.method-text{margin-top:16px;font-size:1rem;font-weight:600;color:#3b2a22;text-align:center;line-height:1.9}
+.result-card{max-width:760px;width:100%;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden}
+.result-body{padding:18px 16px 20px;color:#2a1d18}
+.result-title{font-size:1.5rem;margin:4px 0 6px;font-weight:800;text-align:center}
+.combo-title{font-size:1.05rem;color:#6a4b3b;margin:0 0 10px;font-weight:600;text-align:center;line-height:1.9}
+.emoji-line{text-align:center;font-size:1.35rem;margin:10px 0}
+.bean-cards{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.bean{border:1px solid var(--border);border-radius:14px;padding:10px;background:#fefcfa}
+.bean-title{font-weight:700;font-size:1rem;margin:0}
+.bean-note{font-size:0.9rem;margin:4px 0 0}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.method-text{margin-top:14px;font-size:1rem;font-weight:600;color:#3b2a22;text-align:center;line-height:1.9}
 
-/* 텍스트 링크 라인 */
+/* 결과 액션 (텍스트 링크) */
 .actions-line{margin-top:14px;text-align:center;color:var(--ink-2);user-select:none}
 .actions-line a{color:var(--accent);text-decoration:none;padding:0 8px;cursor:pointer;font-size:.98rem}
 .actions-line a:hover,.actions-line a:focus{text-decoration:underline;outline:none}
-
-/* 포커스 보조 */
-.opt input:focus-visible + label, .gradient-bar input:focus-visible + span, .actions-line a:focus-visible{
-  outline:3px solid var(--accent); outline-offset:2px; border-radius:6px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition:none !important; }
-}
-
-@media (max-width:560px){
-  body{font-size:14.5px}
-  .result-title{font-size:1.36rem}
-}
 </style>
 </head>
 <body>
@@ -143,19 +98,16 @@ body{
 
   <div class="card">
     <h1 class="title">네,커피 핏팅 테스트</h1>
-    <!-- 설명 2줄 -->
     <p class="desc">
       <span class="desc-line">5가지 질문에 답하면,</span><br>
       <span class="desc-line">당신에게 어울리는 원두 조합과 마시는 방식이 제안됩니다.</span>
     </p>
 
     <form id="quiz">
-      <!-- Q1. MBTI (두 타입 × 2줄 레이아웃) -->
+      <!-- Q1. MBTI -->
       <section class="q" aria-labelledby="q1-label">
         <div id="q1-label" class="q-title">Q1. 나의 MBTI는?</div>
-
         <div class="mbti-rows">
-          <!-- 줄 1: EI / NS -->
           <div class="mbti-row">
             <fieldset class="pair" role="radiogroup" aria-label="외향/내향">
               <legend class="pair-legend">E / I</legend>
@@ -168,8 +120,6 @@ body{
               <div class="opt"><input id="ns-s" type="radio" name="mbti-ns" value="S"><label for="ns-s">S (감각)</label></div>
             </fieldset>
           </div>
-
-          <!-- 줄 2: FT / JP -->
           <div class="mbti-row">
             <fieldset class="pair" role="radiogroup" aria-label="감정/사고">
               <legend class="pair-legend">F / T</legend>
@@ -199,15 +149,15 @@ body{
       <!-- Q3. 색상 -->
       <section class="q" aria-labelledby="q3-label">
         <div id="q3-label" class="q-title">Q3. 내가 좋아하는 커피의 색감은?</div>
-        <div class="gradient-bar" role="radiogroup" aria-labelledby="q3-label">
-          <label><input type="radio" name="q3" value="E" aria-label="밝은 꿀빛 계열"><span></span></label>
-          <label><input type="radio" name="q3" value="C" aria-label="연한 카라멜톤"><span></span></label>
-          <label><input type="radio" name="q3" value="A" aria-label="살구빛 로스티"><span></span></label>
-          <label><input type="radio" name="q3" value="F" aria-label="웜 로즈톤"><span></span></label>
-          <label><input type="radio" name="q3" value="D" aria-label="핑크빛 베리톤"><span></span></label>
-          <label><input type="radio" name="q3" value="B" aria-label="라일락 초콜릿톤"><span></span></label>
-          <label><input type="radio" name="q3" value="G" aria-label="고동 계열"><span></span></label>
-          <label><input type="radio" name="q3" value="H" aria-label="다크 카카오톤"><span></span></label>
+        <div class="opts">
+          <div class="opt"><input id="q3-1" type="radio" name="q3" value="E"><label for="q3-1">밝은 골드톤</label></div>
+          <div class="opt"><input id="q3-2" type="radio" name="q3" value="C"><label for="q3-2">은은한 옐로우톤</label></div>
+          <div class="opt"><input id="q3-3" type="radio" name="q3" value="A"><label for="q3-3">부드러운 오렌지톤</label></div>
+          <div class="opt"><input id="q3-4" type="radio" name="q3" value="F"><label for="q3-4">따뜻한 브라운톤</label></div>
+          <div class="opt"><input id="q3-5" type="radio" name="q3" value="D"><label for="q3-5">강렬한 레드톤</label></div>
+          <div class="opt"><input id="q3-6" type="radio" name="q3" value="B"><label for="q3-6">로맨틱 퍼플톤</label></div>
+          <div class="opt"><input id="q3-7" type="radio" name="q3" value="G"><label for="q3-7">따스한 베이지톤</label></div>
+          <div class="opt"><input id="q3-8" type="radio" name="q3" value="H"><label for="q3-8">다크 초콜릿톤</label></div>
         </div>
       </section>
 
@@ -246,27 +196,17 @@ body{
 <div id="result" class="result" role="dialog" aria-modal="true" aria-labelledby="combo-title">
   <div class="result-card" id="resultCard">
     <div class="result-body">
-      <!-- 타이틀 -->
       <h2 id="combo-title" class="result-title"></h2>
-
-      <!-- MBTI 가독성 2줄 -->
       <p id="mbti-line" class="combo-title"></p>
-
-      <!-- 이모지 라인 -->
       <div id="emoji-line" class="emoji-line"></div>
-
-      <!-- 원두 카드 -->
       <div id="bean-cards" class="bean-cards"></div>
-
-      <!-- 방식 문구 (2줄) -->
       <p id="method-text" class="method-text"></p>
 
-      <!-- 상단: 네,커피 바로 가기 -->
+      <!-- 상단 링크 -->
       <nav class="actions-line" aria-label="상단 링크">
         | <a id="goLink" href="https://linktr.ee/Ne.coffee" target="_blank" rel="noopener">네,커피 바로 가기</a> |
       </nav>
-
-      <!-- 하단: 다시/공유/닫기 -->
+      <!-- 하단 링크 -->
       <nav class="actions-line" aria-label="결과 작업">
         | <a id="again" href="#">다시 하기</a> |
         <a id="share" href="#">공유하기</a> |
@@ -302,7 +242,7 @@ const COMBO_TITLES={
   "G+H":"겨울밤의 고백"
 };
 
-/* MBTI 문구 2줄 */
+/* MBTI 문구 (2줄) + 온도 추천 */
 const MBTI_TEMP={
   ISTJ:{line1:"질서 속의 평온,", line2:"따뜻한 컵이 하루를 단단하게 해줄 거예요.", temp:"hot"},
   ISFJ:{line1:"조용한 배려에 어울리는 온기,", line2:"부드럽게 스며드는 따뜻함을.", temp:"hot"},
@@ -322,7 +262,7 @@ const MBTI_TEMP={
   ENTJ:{line1:"추진력을 위한 집중,", line2:"뜨겁게 정리되는 한 모금.", temp:"hot"}
 };
 
-/* 방식 문구 2줄 */
+/* 방식 문구도 2줄 */
 const METHODS={
   M1:{line1:"아메리카노로 즐기세요.", line2:"진한 농도와 긴 여운이 몰입을 더 깊게 해줄 거예요."},
   M2:{line1:"핸드드립으로 즐기세요.", line2:"선명한 향미와 깔끔한 질감이 커피의 진심을 드러내줄 거예요."},
@@ -330,13 +270,13 @@ const METHODS={
 };
 const METHOD_EMOJI={M1:"☕️",M2:"🍵",M3:"🥤"};
 
-/* ===== 폼 진행/유틸 ===== */
+/* ===== 유틸 ===== */
 const form=document.getElementById('quiz');
-const submitBtn=document.getElementById('submit'); /* ← 단 한 번만 선언 */
+const submitBtn=document.getElementById('submit');
 const prog=document.getElementById('prog');
 
 function updateProgress(){
-  let count=0;const required=5;
+  let count=0; const required=5;
   const ei=form.querySelector('input[name="mbti-ei"]:checked');
   const ns=form.querySelector('input[name="mbti-ns"]:checked');
   const ft=form.querySelector('input[name="mbti-ft"]:checked');
@@ -353,7 +293,6 @@ function updateProgress(){
 form.addEventListener('change',updateProgress);updateProgress();
 
 function pairKey(a,b){return[a,b].sort().join('+');}
-function dot(hex){return`<span class="dot" style="background:${hex}"></span>`;}
 function getMBTI(){
   const ei=form.querySelector('input[name="mbti-ei"]:checked')?.value||'';
   const ns=form.querySelector('input[name="mbti-ns"]:checked')?.value||'';
@@ -362,7 +301,7 @@ function getMBTI(){
   return ei+ns+ft+jp;
 }
 
-/* ===== 결과 생성 ===== */
+/* ===== 결과 계산/렌더 ===== */
 function computeResult(){
   const totals={A:0,B:0,C:0,D:0,E:0,F:0,G:0,H:0};
   ["q2","q3","q4"].forEach(q=>{
@@ -373,12 +312,12 @@ function computeResult(){
   const ns=form.querySelector('input[name="mbti-ns"]:checked')?.value;
   const ft=form.querySelector('input[name="mbti-ft"]:checked')?.value;
   const jp=form.querySelector('input[name="mbti-jp"]:checked')?.value;
-
   if(ei==="E"){totals.F+=0.5;totals.B+=0.5;} else if(ei==="I"){totals.A+=0.5;totals.C+=0.5;}
   if(ns==="N"){totals.D+=0.5;totals.E+=0.5;} else if(ns==="S"){totals.G+=0.5;totals.H+=0.5;}
   if(ft==="F"){totals.B+=0.5;totals.C+=0.5;} else if(ft==="T"){totals.A+=0.5;totals.D+=0.5;}
   if(jp==="J"){totals.F+=0.5;totals.H+=0.5;} else if(jp==="P"){totals.E+=0.5;totals.G+=0.5;}
 
+  // 동점 타이브레이커(중요도 우선순위)
   const base = Object.keys(totals).reduce((m,k)=>{ m[k]=0; return m; },{});
   const apply=(name,w)=>{ const sel=form.querySelector(`input[name="${name}"]:checked`); if(!sel) return; sel.value.split("").forEach(l=>base[l]+=w); };
   apply('q2',4); apply('q4',3); apply('q3',2);
@@ -398,8 +337,7 @@ function computeResult(){
 function renderResult(){
   const {top1, top2} = computeResult();
   const T1=TYPES[top1], T2=TYPES[top2];
-  const key=pairKey(top1,top2);
-  const comboTitle=COMBO_TITLES[key] || `${T1.ko}와 ${T2.ko}의 조합`;
+  const comboTitle=COMBO_TITLES[pairKey(top1,top2)] || `${T1.ko}와 ${T2.ko}의 조합`;
   document.getElementById('combo-title').textContent=comboTitle;
 
   const mbti=getMBTI();
@@ -428,28 +366,15 @@ function renderResult(){
   document.getElementById('method-text').innerHTML = `${m.line1}<br>${m.line2}`;
 }
 
-/* ===== 모달 접근성/UX ===== */
+/* ===== 모달 제어 ===== */
 const resultEl = document.getElementById('result');
-const resultCard = document.getElementById('resultCard');
 const againLink = document.getElementById('again');
 const closeLink = document.getElementById('close');
 const shareLink = document.getElementById('share');
-let lastFocused = null;
 
-function lockScroll(lock){ document.documentElement.style.overflow = document.body.style.overflow = lock ? 'hidden' : ''; }
-function showModal(){ lastFocused=document.activeElement; resultEl.classList.add('show'); lockScroll(true); (shareLink||resultEl).focus({preventScroll:true}); document.addEventListener('keydown', trapFocus); }
-function hideModal(){ resultEl.classList.remove('show'); lockScroll(false); document.removeEventListener('keydown', trapFocus); if(lastFocused?.focus) lastFocused.focus(); }
-function trapFocus(e){
-  const focusables = resultEl.querySelectorAll('a, button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-  if(e.key==='Escape'){ hideModal(); return; }
-  if(e.key!=='Tab'||!focusables.length) return;
-  const first=focusables[0], last=focusables[focusables.length-1];
-  if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
-  else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
-}
-resultEl.addEventListener('click', (e)=>{ if(e.target===resultEl) hideModal(); });
+function showModal(){ resultEl.classList.add('show'); }
+function hideModal(){ resultEl.classList.remove('show'); }
 
-/* ===== 제출 ===== */
 submitBtn.addEventListener('click', ()=>{
   const required = [
     ['mbti-ei','mbti-ns','mbti-ft','mbti-jp'],
@@ -463,58 +388,55 @@ submitBtn.addEventListener('click', ()=>{
   renderResult(); showModal();
 });
 
-/* ===== 다시/닫기 ===== */
 againLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); form.reset(); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); });
 closeLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); });
 
-/* ===== 공유: 이미지 + 텍스트/링크 ===== */
+/* ===== 공유: 이미지 + 텍스트(테스트 링크만) ===== */
 async function shareCard(e){
   e.preventDefault();
-  // 1) 결과카드 캡처(이미지)
-  const canvas = await html2canvas(resultCard, {
+
+  // 결과카드 → 이미지
+  const canvas = await html2canvas(document.getElementById('resultCard'), {
     backgroundColor: '#ffffff',
-    scale: window.devicePixelRatio < 2 ? 2 : window.devicePixelRatio,
+    scale: Math.max(2, window.devicePixelRatio || 1),
     useCORS: true
   });
   const dataUrl = canvas.toDataURL('image/png');
-  const res = await fetch(dataUrl);
-  const blob = await res.blob();
-  const file = new File([blob], 'ne-coffee-result.png', { type: 'image/png' });
+  const blob = await (await fetch(dataUrl)).blob();
+  const file = new File([blob], 'ne-coffee-result.png', { type: 'image/png', lastModified: Date.now() });
 
-  // 2) 메시지 텍스트(2줄 문구 반영)
-  const combo = document.getElementById('combo-title').textContent.trim();
-  const mbtiLines = document.getElementById('mbti-line').innerText.trim();
-  const methodLines = document.getElementById('method-text').innerText.trim();
-  const shareText =
-`${combo}
-${mbtiLines}
-${methodLines}
+  const shareTextOnlyLink = 'https://pittingtest.netlify.app'; // ← 텍스트는 링크만
 
-네,커피 핏팅 테스트`;
-  const shareUrl = 'https://linktr.ee/Ne.coffee';
-
-  // 3) Web Share: 파일 + 텍스트 + URL
-  if (navigator.canShare && navigator.canShare({ files:[file], text:shareText, url:shareUrl })) {
-    try{
-      await navigator.share({ files:[file], text:shareText, url:shareUrl, title:'네,커피 핏팅 테스트 결과' });
+  // 파일 + 텍스트(링크)만 전송 (url 파라미터 생략)
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        text: shareTextOnlyLink,
+        title: '네,커피 핏팅 테스트'
+      });
       return;
-    }catch(e){}
+    } catch (_) {}
   }
 
-  // 4) 파일 공유 미지원 → 텍스트+URL만
+  // 파일 공유 미지원 → 텍스트(링크)만
   if (navigator.share) {
-    try{
-      await navigator.share({ text: shareText + '\n' + shareUrl, title:'네,커피 핏팅 테스트 결과' });
+    try {
+      await navigator.share({
+        text: shareTextOnlyLink,
+        title: '네,커피 핏팅 테스트'
+      });
+      // 이미지 저장 안내는 폴백에서 처리
       return;
-    }catch(e){}
+    } catch (_) {}
   }
 
-  // 5) 폴백: 링크 복사 + 이미지 저장
+  // 최후 폴백: 링크 복사 + 이미지 저장
   try {
-    await navigator.clipboard.writeText(shareText + '\n' + shareUrl);
-    alert('공유 문구와 링크를 클립보드에 복사했어요. 채팅창에 붙여넣기 해주세요.');
-  } catch(_) {
-    alert('공유 문구 복사에 실패했어요. 이미지는 저장되고, 링크는 수동으로 붙여넣어 주세요.');
+    await navigator.clipboard.writeText(shareTextOnlyLink);
+    alert('테스트 링크를 클립보드에 복사했어요. 채팅창에 붙여넣기 해주세요.');
+  } catch (_) {
+    alert('링크 복사에 실패했어요. 이미지는 저장되며 링크는 수동으로 붙여넣어 주세요:\n' + shareTextOnlyLink);
   }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -522,49 +444,16 @@ ${methodLines}
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   window.open(dataUrl, '_blank');
 }
-document.getElementById('share').addEventListener('click', shareCard);
+shareLink.addEventListener('click', shareCard);
 
-/* ===== 배너 6장 순환 ===== */
+/* ===== 배너 6장 순환 (무작위 시작) ===== */
 (function(){
   const imgEl = document.getElementById('bannerImg');
-  if(!imgEl) return;
-
   const BANNERS = ['banner1.jpg','banner2.jpg','banner3.jpg','banner4.jpg','banner5.jpg','banner6.jpg'];
-  BANNERS.forEach(src => { const i = new Image(); i.src = src; });
-
-  function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.random()* (i+1) | 0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
-
-  let order = null;
-  try { order = JSON.parse(sessionStorage.getItem('bannerOrder')||'null'); } catch(_){}
-  let idx = parseInt(sessionStorage.getItem('bannerIndex')||'-1',10);
-
-  if(!Array.isArray(order) || order.length !== BANNERS.length || order.some(x=>!BANNERS.includes(x))){
-    order = shuffle(BANNERS); idx = -1;
-  }
-  idx = (idx + 1) % order.length;
-  const pick = order[idx];
-
-  imgEl.classList.add('fade-in');
-  imgEl.addEventListener('load', ()=> imgEl.classList.add('loaded'), { once:true });
-  imgEl.src = pick;
-
-  const altMap = {
-    'banner1.jpg':'네,커피 — 햇살 드는 바 테이블',
-    'banner2.jpg':'네,커피 — 우드톤 바리스타 존',
-    'banner3.jpg':'네,커피 — 라떼 아트가 있는 컵',
-    'banner4.jpg':'네,커피 — 드립 장면',
-    'banner5.jpg':'네,커피 — 원두와 핸드밀',
-    'banner6.jpg':'네,커피 — 전포동 매장 전경'
-  };
-  if (altMap[pick]) imgEl.alt = altMap[pick];
-
-  if(idx === order.length - 1){
-    sessionStorage.setItem('bannerOrder', JSON.stringify(shuffle(BANNERS)));
-    sessionStorage.setItem('bannerIndex', '-1');
-  }else{
-    sessionStorage.setItem('bannerOrder', JSON.stringify(order));
-    sessionStorage.setItem('bannerIndex', String(idx));
-  }
+  // 무작위 시작 인덱스
+  let i = Math.floor(Math.random() * BANNERS.length);
+  imgEl.src = BANNERS[i];
+  setInterval(()=>{ i = (i+1)%BANNERS.length; imgEl.style.opacity=.3; setTimeout(()=>{ imgEl.src=BANNERS[i]; imgEl.style.opacity=.82; },100); }, 4000);
 })();
 </script>
 </body>
