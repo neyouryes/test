@@ -20,6 +20,8 @@ body{
 }
 .wrap{max-width:860px;margin:0 auto;padding:0 16px 72px}
 
+  .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+  
 /* 배너 */
 .banner{position:relative;margin:0 -16px 12px;aspect-ratio:16/5;border-radius:16px;overflow:hidden;background:#000}
 .banner img{width:100%;height:100%;object-fit:cover;display:block;opacity:.82;transition:opacity .4s ease}
@@ -367,23 +369,25 @@ function renderResult(){
   document.getElementById('emoji-line').textContent = `${T1.emoji}${T2.emoji}${tempEmoji}${methodEmoji}`;
 
   // 원두 카드 렌더
-  const beanCards=document.getElementById('bean-cards');
-  const koLine = key => {
-    // A/B/C는 한글만, D~H는 한글명(워시드/내추럴 포함 그대로)
-    return TYPES[key].ko;
-  };
-  beanCards.innerHTML = `
-    <div class="bean">
-      <p class="bean-title-en">${T1.en}</p>
-      <p class="bean-title-ko">${koLine(top1)}</p>
-      <p class="bean-note">${T1.cup}</p>
-    </div>
-    <div class="bean">
-      <p class="bean-title-en">${T2.en}</p>
-      <p class="bean-title-ko">${koLine(top2)}</p>
-      <p class="bean-note">${T2.cup}</p>
-    </div>
-  `;
+const beanCards = document.getElementById('bean-cards');
+const koLine = key => TYPES[key].ko; // A/B/C는 한글만, D~H는 워시드/내추럴 포함 그대로
+
+beanCards.innerHTML = `
+  <div class="bean">
+    <p class="bean-title-en">
+      <span class="dot" style="background:${T1.color}"></span>${T1.en}
+    </p>
+    <p class="bean-title-ko">${koLine(top1)}</p>
+    <p class="bean-note">${T1.cup}</p>
+  </div>
+  <div class="bean">
+    <p class="bean-title-en">
+      <span class="dot" style="background:${T2.color}"></span>${T2.en}
+    </p>
+    <p class="bean-title-ko">${koLine(top2)}</p>
+    <p class="bean-note">${T2.cup}</p>
+  </div>
+`;
 
   const m = METHODS[methodKey];
   document.getElementById('method-text').innerHTML = `${m.line1}<br>${m.line2}`;
