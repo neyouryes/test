@@ -20,7 +20,7 @@ body{
 }
 .wrap{max-width:860px;margin:0 auto;padding:0 16px 72px}
 
-  .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+ .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
   
 /* 배너 */
 .banner{position:relative;margin:0 -16px 12px;aspect-ratio:16/5;border-radius:16px;overflow:hidden;background:#000}
@@ -62,8 +62,18 @@ body{
 /* Q3: 그라데이션 바 */
 .gradient-bar{
   position:relative;height:40px;border-radius:10px;overflow:hidden;
-  background:linear-gradient(to right,#F5E08C,#F9D28E,#F6B48F,#E6A18F,#F28C8C,#C3A6E8,#C9A588,#B58C8C);
-  display:flex;margin-top:10px
+  background:linear-gradient(
+    to right,
+    #F7D794, /* C 달 - 밝음 */
+    #F6C89F, /* A 행운 */
+    #D9A441, /* E 페루 */
+    #E7798E, /* D 콜롬비아 */
+    #C96E6E, /* F 르완다 */
+    #8E3A59, /* B 연인 */
+    #8C6A43, /* G 카메룬 */
+    #5A3E36  /* H 에티오피아 - 어두움 */
+  );
+  display:flex;margin-top:10px;
 }
 .gradient-bar label{flex:1;cursor:pointer;position:relative}
 .gradient-bar input{display:none}
@@ -118,8 +128,8 @@ body{
   <div class="card">
     <h1 class="title">네,커피 핏팅 테스트</h1>
     <p class="desc">
-      <span class="desc-line">5가지 질문에 답하면,</span><br>
-      <span class="desc-line">당신에게 어울리는 원두 조합과 마시는 방식이 제안됩니다.</span>
+      <span class="desc-line">5가지 질문에 답하고,</span><br>
+      <span class="desc-line">당신에게 딱맞는 원두를 만나보세요.</span>
     </p>
 
     <form id="quiz">
@@ -239,18 +249,17 @@ body{
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
-/* ===== 데이터 세트 ===== */
 const TYPES={
-  A:{en:"Chance",ko:"행운",cup:"캬라멜, 로스트 아몬드",emoji:"🍀",color:"#F6B48F"},
-  B:{en:"Amante",ko:"연인",cup:"건자두, 레드와인",emoji:"❤️",color:"#C3A6E8"},
-  C:{en:"Lune",ko:"달",cup:"홍시, 캬라멜시럽",emoji:"🌙",color:"#F9D28E"},
-  D:{en:"Colombia El Diviso Washed",ko:"콜롬비아 워시드",cup:"라즈베리, 블루베리, 풍선껌",emoji:"🍓",color:"#F28C8C"},
-  E:{en:"Peru El Cedro Natural",ko:"페루 내추럴",cup:"사향벌꿀, 배과즙, 시나몬",emoji:"🍯",color:"#F5E08C"},
-  F:{en:"Rwanda Gitoki Washed",ko:"르완다 워시드",cup:"자두, 칵테일",emoji:"🍒",color:"#E6A18F"},
-  G:{en:"Cameroon Oku Natural",ko:"카메룬 내추럴",cup:"군밤, 찐고구마",emoji:"🌰",color:"#C9A588"},
-  H:{en:"Ethiopia Aricha Washed",ko:"에티오피아 워시드",cup:"다크 체리, 밀크 초콜렛",emoji:"🍫",color:"#B58C8C"}
+  A:{en:"Chance",ko:"행운",cup:"캬라멜, 로스트 아몬드",emoji:"🍀",color:"#F6C89F"},
+  B:{en:"Amante",ko:"연인",cup:"건자두, 레드와인",emoji:"❤️",color:"#8E3A59"},
+  C:{en:"Lune",ko:"달",cup:"홍시, 캬라멜시럽",emoji:"🌙",color:"#F7D794"},
+  D:{en:"Colombia El Diviso Washed",ko:"콜롬비아 워시드",cup:"라즈베리, 블루베리, 풍선껌",emoji:"🍓",color:"#E7798E"},
+  E:{en:"Peru El Cedro Natural",ko:"페루 내추럴",cup:"사향벌꿀, 배과즙, 시나몬",emoji:"🍯",color:"#D9A441"},
+  F:{en:"Rwanda Gitoki Washed",ko:"르완다 워시드",cup:"자두, 칵테일",emoji:"🍒",color:"#C96E6E"},
+  G:{en:"Cameroon Oku Natural",ko:"카메룬 내추럴",cup:"군밤, 찐고구마",emoji:"🌰",color:"#8C6A43"},
+  H:{en:"Ethiopia Aricha Washed",ko:"에티오피아 워시드",cup:"다크 체리, 밀크 초콜렛",emoji:"🍫",color:"#5A3E36"}
 };
-
+  
 const COMBO_TITLES={
   "A+B":"행운의 연인","A+C":"달빛 아래 행운","A+D":"운명의 모험","A+E":"황금빛 향연","A+F":"열정의 별빛","A+G":"따스한 행운","A+H":"달콤한 축복",
   "B+C":"달빛 로망","B+D":"사랑의 항해","B+E":"꿀처럼 달콤한 사랑","B+F":"불꽃 같은 연정","B+G":"포근한 약속","B+H":"초콜릿 키스",
@@ -369,26 +378,26 @@ function renderResult(){
   document.getElementById('emoji-line').textContent = `${T1.emoji}${T2.emoji}${tempEmoji}${methodEmoji}`;
 
   // 원두 카드 렌더
-const beanCards = document.getElementById('bean-cards');
-const koLine = key => TYPES[key].ko; // A/B/C는 한글만, D~H는 워시드/내추럴 포함 그대로
+const beanCards=document.getElementById('bean-cards');
+const koLine = key => TYPES[key].ko; // A/B/C는 한글만, D~H는 워시드/내추럴 포함
 
 beanCards.innerHTML = `
   <div class="bean">
     <p class="bean-title-en">
-      <span class="dot" style="background:${T1.color}"></span>${T1.en}
+      <span class="dot" style="background:${TYPES[top1].color}"></span>${TYPES[top1].en}
     </p>
     <p class="bean-title-ko">${koLine(top1)}</p>
-    <p class="bean-note">${T1.cup}</p>
+    <p class="bean-note">${TYPES[top1].cup}</p>
   </div>
   <div class="bean">
     <p class="bean-title-en">
-      <span class="dot" style="background:${T2.color}"></span>${T2.en}
+      <span class="dot" style="background:${TYPES[top2].color}"></span>${TYPES[top2].en}
     </p>
     <p class="bean-title-ko">${koLine(top2)}</p>
-    <p class="bean-note">${T2.cup}</p>
+    <p class="bean-note">${TYPES[top2].cup}</p>
   </div>
 `;
-
+  
   const m = METHODS[methodKey];
   document.getElementById('method-text').innerHTML = `${m.line1}<br>${m.line2}`;
 }
@@ -468,11 +477,9 @@ shareLink.addEventListener('click', shareCard);
   const imgEl = document.getElementById('bannerImg');
   const BANNERS = ['banner1.jpg','banner2.jpg','banner3.jpg','banner4.jpg','banner5.jpg','banner6.jpg'];
   const pick = BANNERS[Math.floor(Math.random()*BANNERS.length)];
-  // 프리로드(선택)
   const pre = new Image(); pre.src = pick;
   imgEl.style.opacity = .3;
   pre.onload = ()=>{ imgEl.src = pick; imgEl.style.opacity = .82; };
-  // onload 타이밍 이슈 대비
   setTimeout(()=>{ imgEl.src = pick; imgEl.style.opacity = .82; }, 80);
 })();
 </script>
