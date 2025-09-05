@@ -399,8 +399,9 @@ beanCards.innerHTML = `
 `;
   
   const m = METHODS[methodKey];
-  document.getElementById('method-text').innerHTML = `${m.line1}<br>${m.line2}`;
-}
+let methodHtml = `${m.line1}<br>${m.line2}`;
+if(m.line3){ methodHtml += `<br>${m.line3}`; }
+document.getElementById('method-text').innerHTML = methodHtml;
 
 /* ===== 모달 제어 ===== */
 const resultEl = document.getElementById('result');
