@@ -60,45 +60,51 @@ body{
 }
 @media(min-width:560px){.mbti-row{grid-template-columns:1fr 1fr}}
 
-/* Q3: 색상 (그라데이션 바) — 여기를 새 코드로 교체 */
-.gradient-bar {
-  position:relative;
-  height:40px;
-  border-radius:10px;
-  overflow:hidden;
-  display:flex;
-  margin-top:10px;
-  background:none;
-  color-scheme: light;
-  isolation:isolate;
-  forced-color-adjust: none;
-}
-.gradient-bar::before {
-  content:"";
-  position:absolute; inset:0;
-  border-radius:10px;
-  background:linear-gradient(
-    to right,
-    #F7D794,#F6C89F,#D9A441,#E7798E,
-    #C96E6E,#8E3A59,#8C6A43,#5A3E36
-  );
-  pointer-events:none;
-  filter:none !important;
-  forced-color-adjust: none;
-}
-/* ... 이하 label, input, span 스타일은 그대로 유지 ... */
+   /* Q3: 색상 (그라데이션 바) */
+    .gradient-bar {
+      position:relative;
+      height:40px;
+      border-radius:10px;
+      overflow:hidden;
+      display:flex;
+      margin-top:10px;
+      background:none;
+      isolation:isolate;
+    }
 
-@media (prefers-color-scheme: dark){
-  .gradient-bar,
-  .gradient-bar::before{
-    forced-color-adjust:none !important;
-    background:linear-gradient(
-      to right,
-      #F7D794,#F6C89F,#D9A441,#E7798E,
-      #C96E6E,#8E3A59,#8C6A43,#5A3E36
-    ) !important;
-  }
-}
+    .gradient-bar::before{
+      content:"";
+      position:absolute; inset:0; border-radius:10px;
+      background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'>\
+<defs><linearGradient id='g' x1='0' x2='1'>\
+<stop offset='0%' stop-color='%23F7D794'/>\
+<stop offset='14.3%' stop-color='%23F6C89F'/>\
+<stop offset='28.6%' stop-color='%23D9A441'/>\
+<stop offset='42.9%' stop-color='%23E7798E'/>\
+<stop offset='57.2%' stop-color='%23C96E6E'/>\
+<stop offset='71.5%' stop-color='%238E3A59'/>\
+<stop offset='85.8%' stop-color='%238C6A43'/>\
+<stop offset='100%' stop-color='%235A3E36'/>\
+</linearGradient></defs>\
+<rect width='800' height='40' fill='url(%23g)'/>\
+</svg>");
+      background-size:100% 100%;
+      background-repeat:no-repeat;
+      pointer-events:none;
+      mix-blend-mode:normal;
+      filter:none !important;
+      forced-color-adjust:none;
+    }
+
+    .gradient-bar label{flex:1;cursor:pointer;position:relative;z-index:1}
+    .gradient-bar input{display:none}
+    .gradient-bar span{display:block;width:100%;height:100%}
+    .gradient-bar input:checked + span{
+      outline:3px solid var(--accent);
+      outline-offset:-3px;
+      border-radius:4px;
+    }
 
 
 /* 제출 바 */
