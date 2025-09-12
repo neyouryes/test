@@ -59,7 +59,7 @@ body{
 }
 @media(min-width:560px){.mbti-row{grid-template-columns:1fr 1fr}}
 
-/* Q3: 그라데이션 바 */
+/* Q3: 색상 (그라데이션 바) */
 .gradient-bar{
   position:relative;height:40px;border-radius:10px;overflow:hidden;
   background:linear-gradient(
@@ -74,6 +74,18 @@ body{
     #5A3E36  /* H 에티오피아 - 어두움 */
   );
   display:flex;margin-top:10px;
+
+  /* ⬇︎ 다크 모드 자동 반전 방지 (핵심 추가) */
+  color-scheme: light;
+}
+  
+  @media (prefers-color-scheme: dark){
+  .gradient-bar{
+    background:linear-gradient(
+      to right,
+      #F7D794,#F6C89F,#D9A441,#E7798E,#C96E6E,#8E3A59,#8C6A43,#5A3E36
+    );
+  }
 }
 .gradient-bar label{flex:1;cursor:pointer;position:relative}
 .gradient-bar input{display:none}
