@@ -19,7 +19,7 @@
     --ink-2:#d8c6bc;
     --bg:#151210;
   }
-  .opt label{ background:#1c1715 }
+  .opt label{ background:#1c1715; color:#faefe9 }
   .pair{ background:#2a221e; border-color:#5a4034; color:#faefe9 }
   .bean{ background:#1a1715 }
   .banner img{ opacity:.75 }
@@ -51,7 +51,7 @@ body{
 .opts{display:grid;gap:8px}
 .opt{position:relative}
 .opt input{position:absolute;opacity:0;pointer-events:none}
-.opt label{ display:block;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer; transition:box-shadow .15s ease,border-color .15s ease,transform .05s ease }
+.opt label{ display:block; background:#fff; color:var(--ink); border:1.5px solid var(--border); border-radius:12px; padding:10px 12px; cursor:pointer; transition:box-shadow .15s ease,border-color .15s ease,transform .05s ease }
 .opt label:active{transform:scale(.995)}
 .opt input:checked + label{border-color:var(--accent);box-shadow:0 0 0 2px rgba(106,75,59,.15) inset;background:var(--accent);color:#fff;transition:all .15s ease}
 /* MBTI (Q1) */
@@ -343,10 +343,27 @@ function trapFocus(e){ if(!resultEl.classList.contains('show')) return; const fo
 function showModal(){ resultEl.classList.add('show'); document.body.style.overflow='hidden'; setTimeout(()=>{ resultCard.focus(); }, 0); }
 function hideModal(){ resultEl.classList.remove('show'); document.body.style.overflow=''; }
 
-submitBtn.addEventListener('click', ()=>{ const required = [ ['mbti-ei','mbti-ns','mbti-ft','mbti-jp'], ['q2'],['q3'],['q4'],['method'] ]; const ok = required.every(g=> g.length>1 ? g.every(n=> form.querySelector(`input[name="${n}"]:checked`)) : !!form.querySelector(`input[name="${g[0]}"]:checked`) ); if(!ok){ toast('모든 문항을 선택해주세요.'); return; } renderResult(); showModal(); history.replaceState(null,'', buildURLFromAnswers()); });
-againLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); form.reset(); updateProgress(); localStorage.removeItem('necoffee-fit'); history.replaceState(null,'', location.pathname); window.scrollTo({top:0,behavior:'smooth'}); });
-closeLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); });
-resultEl.addEventListener('click', (e)=>{ if(e.target===resultEl) hideModal(); });
+submitBtn.addEventListener('click', ()=>{
+  const required = [ ['mbti-ei','mbti-ns','mbti-ft','mbti-jp'], ['q2'],['q3'],['q4'],['method'] ];
+  const ok = required.every(g=> g.length>1 ? g.every(n=> form.querySelector(`input[name="${n}"]:checked`)) : !!form.querySelector(`input[name="${g[0]}"]:checked`) );
+  if(!ok){ toast('모든 문항을 선택해주세요.'); return; }
+  // 다음 방문부터만 자동 채우기 허용
+  sessionStorage.setItem('necoffee-allow-prefill','1');
+  renderResult();
+  showModal();
+  history.replaceState(null,'', buildURLFromAnswers());
+});
+againLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); form.reset(); updateProgress(); localStoragagainLink.addEventListener('click', (e)=>{
+  e.preventDefault();
+  hideModal();
+  form.reset();
+  updateProgress();
+  localStorage.removeItem('necoffee-fit');
+  sessionStorage.removeItem('necoffee-allow-prefill');
+  history.replaceState(null,'', location.pathname);
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+closeLinkarget===resultEl) hideModal(); });
 window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && resultEl.classList.contains('show')) hideModal(); trapFocus(e); });
 
 /* ===== 공유: 카드 이미지 + 텍스트(답변 포함 링크) ===== */
@@ -369,9 +386,15 @@ function loadFromQuery(){ const p = new URLSearchParams(location.search); if(!p.
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1400); }
 
 // 초기화
-restoreFromStorage();
+// 브라우저의 폼 기억/자동복원으로 인해 라디오가 미리 선택되는 것을 방지
+if(!sessionStorage.getItem('necoffee-allow-prefill')){
+  form.reset();
+}
+const loadedFromQuery = loadFromQuery();
+if(!loadedFromQuery && sessionStorage.getItem('necoffee-allow-prefill')==='1'){
+  restoreFromStorage();
+}
 updateProgress();
-loadFromQuery();
 </script>
 </body>
 </html>
