@@ -139,6 +139,21 @@ button:active,a:active,input:active,label:active,select:active,textarea:active{ 
   .actions-line{color:#cdb8ad}
   .actions-line a{color:#e7c5ad}
 }
+  @media (prefers-color-scheme: dark){
+  :root{
+    --surface:rgba(28,24,22,.82);
+    --border:#433a34;
+    --ink:#faefe9;
+    --ink-2:#d8c6bc;
+    --bg:#151210;
+  }
+  .opt label{ background:#2a221e; color:#f7eee7; border-color:#5a4034; }
+  .opt input:checked + label{ background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 0 0 2px rgba(106,75,59,.25) inset; }
+  .pair{ background:#1f1916; border-color:#5a4034; color:#faefe9; }
+  .bean{ background:#1a1715; border-color:#5a4034; color:#f7eee7; }
+  .banner img{ opacity:.75 }
+  .card{ background:var(--surface); color:var(--ink); }
+}
 </style>
 </head>
 <body>
