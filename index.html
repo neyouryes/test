@@ -7,40 +7,371 @@
 <title>Ne, Coffee Fitting Test — Cathub Ready (Full)</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{ --ink:#3B2A22; --ink-2:#5A4034; --accent:#6A4B3B; --surface:rgba(255,255,255,.92); --border:#E7DED6; --bg:#f7f2ef }
-@media (prefers-color-scheme: dark){
-.btn{
-color:#fff;
-background:linear-gradient(180deg,#463229,#241914);
--webkit-tap-highlight-color:transparent;
-box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.06);
-transition:background .15s ease, transform .05s ease, filter .15s ease, box-shadow .15s ease;
+:root{
+  --ink:#3B2A22; --ink-2:#5A4034; --accent:#6A4B3B;
+  --surface:rgba(255,255,255,.92); --border:#E7DED6; --bg:#f7f2ef;
 }
-.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.btn:active{
-background:linear-gradient(180deg,#3b2a22,#1b130f);
-transform:scale(.985);
-filter:briness(.95) }
-.btn[disabled]{ opacity:.55; cursor:not-allowed; filter:none!important; transform:none!important }
-.submitcard{ background:var(--surface); transition:background .25s ease }
-.progress{ background:#2a221e }
-.progress>span{ background:linear-gradient(90deg,#b38a72,#e0c3ad) }
-}
-/* Dark-mode contrast fixes */
 @media (prefers-color-scheme: dark){
-.result-card{ background:#1c1714; color:#efe4dd }
-.result-body{ position:relative; z-index:1 }
-.result-title{ color:#f6ece5 }
-.combo-title{ color:#e9d7cc }
-.theme-line{ color:#e0cfc5 }
-.method-text{ color:#f0e6df }
-.actions-line{ color:#cdb8ad }
-.actions-line a{ color:#e7c5ad }
+  :root{
+    --surface:rgba(28,24,22,.82);
+    --border:#433a34;
+    --ink:#faefe9;
+    --ink-2:#d8c6bc;
+    --bg:#151210;
+  }
+  .opt label{ background:#1c1715 }
+  .pair{ background:#2a221e; border-color:#5a4034; color:#faefe9 }
+  .bean{ background:#1a1715 }
+  .banner img{ opacity:.75 }
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:'Noto Serif KR', serif;
+  color:var(--ink); line-height:1.7; letter-spacing:.1px;
+  background:var(--bg); margin:0; font-size:16px;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px 72px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+/* 배너 */
+.banner{position:relative;margin:0 -16px 12px;aspect-ratio:16/5;border-radius:16px;overflow:hidden;background:#000}
+.banner img{width:100%;height:100%;object-fit:cover;display:block;opacity:.82;transition:opacity .4s ease}
+.banner-text{position:absolute;bottom:14px;left:16px;display:flex;flex-direction:column;gap:2px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.banner-top{font-weight:700;font-size:1.6rem;line-height:1.2}
+.banner-bottom{font-size:0.9rem;opacity:.9}
+/* 카드 */
+.card{background:var(--surface);border-radius:16px;box-shadow:0 10px 30px rgba(59,42,34,.18);padding:18px;margin-top:10px;border:1px solid var(--border);backdrop-filter:saturate(150%) blur(6px)}
+.title{margin:6px 0 4px;font-size:1.38rem;font-weight:700}
+.desc{margin:0 0 12px;color:var(--ink-2);font-size:1rem;line-height:1.9;letter-spacing:.1px}
+.desc .desc-line{display:inline}
+/* 문항 */
+.q{padding:12px 0;border-top:1px dashed var(--border)}
+.q:first-child{border-top:0}
+.q-title{font-size:1.05rem;margin:4px 0 8px;font-weight:700}
+.opts{display:grid;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt label{ display:block;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer; transition:box-shadow .15s ease,border-color .15s ease,transform .05s ease }
+.opt label:active{transform:scale(.995)}
+.opt input:checked + label{border-color:var(--accent);box-shadow:0 0 0 2px rgba(106,75,59,.15) inset;background:var(--accent);color:#fff;transition:all .15s ease}
+/* MBTI (Q1) */
+.mbti-rows{display:grid;gap:12px}
+.mbti-row{display:grid;grid-template-columns:1fr;gap:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;border:1px dashed var(--border);border-radius:10px;padding:10px;background:#fff}
+.pair-legend{ grid-column:1/-1;font-size:.85rem;color:var(--ink-2); margin:0 0 6px;text-align:center;white-space:nowrap }
+@media(min-width:560px){.mbti-row{grid-template-columns:1fr 1fr}}
+/* Q3: 색상 (그라데이션 바) */
+.gradient-bar{ position:relative; height:40px; border-radius:10px; overflow:hidden; display:flex; margin-top:10px; background:none; isolation:isolate }
+.gradient-bar::before{ content:""; position:absolute; inset:0; border-radius:10px; background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'>\
+<defs><linearGradient id='g' x1='0' x2='1'>\
+<stop offset='0%' stop-color='%23F7D794'/>\
+<stop offset='14.3%' stop-color='%23F6C89F'/>\
+<stop offset='28.6%' stop-color='%23D9A441'/>\
+<stop offset='42.9%' stop-color='%23E7798E'/>\
+<stop offset='57.2%' stop-color='%23C96E6E'/>\
+<stop offset='71.5%' stop-color='%238E3A59'/>\
+<stop offset='85.8%' stop-color='%238C6A43'/>\
+<stop offset='100%' stop-color='%235A3E36'/>\
+</linearGradient></defs>\
+<rect width='800' height='40' fill='url(%23g)'/>\
+</svg>"); background-size:100% 100%; background-repeat:no-repeat; pointer-events:none; mix-blend-mode:normal; filter:none !important; forced-color-adjust:none }
+.gradient-bar label{flex:1;cursor:pointer;position:relative;z-index:1}
+.gradient-bar input{display:none}
+.gradient-bar span{display:block;width:100%;height:100%}
+.gradient-bar input:checked + span{ outline:3px solid var(--accent); outline-offset:-3px; border-radius:4px }
+/* 제출 바 */
+.submitbar{position:sticky;bottom:0;margin-top:12px;z-index:20}
+.submitcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(59,42,34,.18)}
+.progress{flex:1;height:8px;background:#efe6de;border-radius:999px;overflow:hidden}
+.progress > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#3b2a22);transition:width .3s ease}
+/* 버튼 */
+.btn{appearance:none;-webkit-appearance:none;border:0;border-radius:12px;padding:10px 14px;font-size:.95rem;cursor:pointer;color:#fff;background:linear-gradient(180deg,#3b2a22,#2c1f19);background-clip:padding-box;box-shadow:0 6px 18px rgba(59,42,34,.18), inset 0 -1px 0 rgba(255,255,255,.05);transition:background .15s ease,transform .05s ease,filter .15s ease,box-shadow .15s ease}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn:active{background:linear-gradient(180deg,#4a342a,#241914);transform:scale(.985);filter:brightness(.96);box-shadow:0 3px 12px rgba(59,42,34,.28), inset 0 1px 0 rgba(0,0,0,.08)}
+/* 결과 모달 */
+.result{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.result.show{display:flex}
+.result-card{max-width:760px;width:100%;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.28), 0 2px 10px rgba(0,0,0,.08);overflow:hidden;position:relative;background-image:radial-gradient(1200px 400px at 50% -20%, rgba(106,75,59,.08), transparent 60%)}
+.result-card::before{content:"";position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(135deg, rgba(106,75,59,.35), rgba(59,42,34,.12));-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:destination-out;mask-composite:exclude;pointer-events:none;z-index:0}
+.result-card::after{content:"Ne, Coffee";position:absolute;right:16px;bottom:12px;font-size:.72rem;letter-spacing:.08em;color:rgba(59,42,34,.55)}
+@media (prefers-color-scheme: dark){ .result-card{ background:#1c1714;color:#efe4dd;box-shadow:0 24px 80px rgba(0,0,0,.55),0 2px 10px rgba(0,0,0,.25) } .result-card::before{background:linear-gradient(135deg, rgba(179,138,114,.45), rgba(106,75,59,.15));pointer-events:none;z-index:0} .result-card::after{color:rgba(234,224,218,.45)} }
+.result-body{padding:22px 18px 22px;color:#2a1d18;max-width:640px;margin:0 auto;position:relative;z-index:1}
+.result-title{font-size:1.5rem;margin:4px 0 6px;font-weight:800;text-align:center}
+.combo-title{font-size:0.9rem;color:#6a4b3b;margin:0 0 10px;font-weight:500;text-align:center;line-height:1.9}
+.theme-line{font-size:.96rem;color:var(--ink-2);text-align:center;margin:8px 0 6px}
+.emoji-line{text-align:center;font-size:1.4rem;margin:14px 0;position:relative}
+.emoji-line::before,.emoji-line::after{content:"";position:absolute;top:50%;width:32%;height:1px;background:linear-gradient(90deg,transparent, rgba(106,75,59,.35));}
+.emoji-line::before{left:0}
+.emoji-line::after{right:0;transform:scaleX(-1)}
+/* 원두 카드 */
+.bean-cards{display:grid;grid-template-columns:1fr;gap:12px;margin-top:10px}
+@media(min-width:480px){.bean-cards{grid-template-columns:1fr 1fr}}
+.bean{border:1px solid var(--border);border-radius:14px;padding:14px 12px;background:#fefcfa;text-align:center;box-shadow:0 2px 10px rgba(59,42,34,.06)}
+.bean-title-en{font-weight:800;font-size:1.02rem;margin:0}
+.bean-title-ko{font-size:0.9rem;color:var(--ink-2);margin:2px 0 0}
+.bean-note{font-size:0.9rem;margin:6px 0 0}
+/* 방식 문구 */
+.method-text{margin-top:14px;font-size:0.9rem;font-weight:400;color:#3b2a22;text-align:center;line-height:1.9}
+/* 결과 액션 */
+.actions-line{margin-top:14px;text-align:center;color:var(--ink-2);user-select:none}
+.actions-line a{color:var(--accent);text-decoration:none;padding:0 8px;cursor:pointer;font-size:.98rem}
+.actions-line a:hover,.actions-line a:focus{text-decoration:underline;outline:none}
+/* 토스트 */
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);padding:10px 14px;background:#000;color:#fff;border-radius:10px;opacity:0;transition:opacity .2s ease, transform .2s ease;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+/* 모바일 터치 피드백 & 탭 하이라이트 제거 */
+button,a,input,label,select,textarea{ -webkit-tap-highlight-color:transparent; outline:none; transition: filter .15s ease, transform .1s ease }
+button:active,a:active,input:active,label:active,select:active,textarea:active{ filter:brightness(.92); transform:scale(.98) }
+/* 다크모드 버튼 & 진행바 개선 */
+@media (prefers-color-scheme: dark){
+  .btn{ color:#fff; background:linear-gradient(180deg,#463229,#241914); -webkit-tap-highlight-color:transparent; box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.06); transition:background .15s ease, transform .05s ease, filter .15s ease, box-shadow .15s ease }
+  .btn:hover{ filter:brightness(1.08); transform:translateY(-1px) }
+  .btn:active{ background:linear-gradient(180deg,#3b2a22,#1b130f); transform:scale(.985); filter:brightness(.95); box-shadow:0 3px 12px rgba(0,0,0,.5), inset 0 1px 0 rgba(0,0,0,.25) }
+  .btn[disabled]{ opacity:.55; cursor:not-allowed; filter:none!important; transform:none!important }
+  .submitcard{ background:var(--surface); transition:background .25s ease }
+  .progress{ background:#2a221e }
+  .progress>span{ background:linear-gradient(90deg,#b38a72,#e0c3ad) }
+  .result-title{color:#f6ece5}
+  .combo-title{color:#e9d7cc}
+  .theme-line{color:#e0cfc5}
+  .method-text{color:#f0e6df}
+  .actions-line{color:#cdb8ad}
+  .actions-line a{color:#e7c5ad}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="banner" aria-hidden="true">
-<img id="bannerImg" src="banner1.jpg" alt="">
-<div class="banner-text">
+  <div class="banner" aria-hidden="true">
+    <img id="bannerImg" src="banner1.jpg" alt="">
+    <div class="banner-text">
+      <div class="banner-top">Ne, Coffee Fitting Test</div>
+      <div class="banner-bottom">네,커피 핏팅 테스트</div>
+    </div>
+  </div>
+
+  <div class="card" aria-describedby="progressText">
+    <h1 class="title">네,커피 핏팅 테스트</h1>
+    <p class="desc"><span class="desc-line">5가지 질문에 답하고,</span><br><span class="desc-line">당신에게 딱맞는 원두를 만나보세요.</span></p>
+
+    <form id="quiz">
+      <!-- Q1. MBTI -->
+      <section class="q" aria-labelledby="q1-label">
+        <h2 id="q1-label" class="q-title">Q1. 나의 MBTI는?</h2>
+        <div class="mbti-rows">
+          <div class="mbti-row">
+            <fieldset class="pair" role="radiogroup" aria-label="외향/내향">
+              <legend class="pair-legend">E / I</legend>
+              <div class="opt"><input id="ei-e" type="radio" name="mbti-ei" value="E"><label for="ei-e">E (외향)</label></div>
+              <div class="opt"><input id="ei-i" type="radio" name="mbti-ei" value="I"><label for="ei-i">I (내향)</label></div>
+            </fieldset>
+            <fieldset class="pair" role="radiogroup" aria-label="직관/감각">
+              <legend class="pair-legend">N / S</legend>
+              <div class="opt"><input id="ns-n" type="radio" name="mbti-ns" value="N"><label for="ns-n">N (직관)</label></div>
+              <div class="opt"><input id="ns-s" type="radio" name="mbti-ns" value="S"><label for="ns-s">S (감각)</label></div>
+            </fieldset>
+          </div>
+          <div class="mbti-row">
+            <fieldset class="pair" role="radiogroup" aria-label="감정/사고">
+              <legend class="pair-legend">F / T</legend>
+              <div class="opt"><input id="ft-f" type="radio" name="mbti-ft" value="F"><label for="ft-f">F (감정)</label></div>
+              <div class="opt"><input id="ft-t" type="radio" name="mbti-ft" value="T"><label for="ft-t">T (사고)</label></div>
+            </fieldset>
+            <fieldset class="pair" role="radiogroup" aria-label="계획/인식">
+              <legend class="pair-legend">J / P</legend>
+              <div class="opt"><input id="jp-j" type="radio" name="mbti-jp" value="J"><label for="jp-j">J (계획)</label></div>
+              <div class="opt"><input id="jp-p" type="radio" name="mbti-jp" value="P"><label for="jp-p">P (인식)</label></div>
+            </fieldset>
+          </div>
+        </div>
+      </section>
+
+      <!-- Q2. 향미 -->
+      <section class="q" aria-labelledby="q2-label">
+        <h2 id="q2-label" class="q-title">Q2. 내가 끌리는 커피의 향미는?</h2>
+        <div class="opts">
+          <div class="opt"><input id="q2-1" type="radio" name="q2" value="AG"><label for="q2-1">묵직하고 진한 로스티드 풍미</label></div>
+          <div class="opt"><input id="q2-2" type="radio" name="q2" value="BH"><label for="q2-2">고소하고 따뜻한 달콤함</label></div>
+          <div class="opt"><input id="q2-3" type="radio" name="q2" value="CF"><label for="q2-3">상큼하고 활력 넘치는 과일향</label></div>
+          <div class="opt"><input id="q2-4" type="radio" name="q2" value="DE"><label for="q2-4">섬세하고 특별한 꽃/스파이시 향</label></div>
+        </div>
+      </section>
+
+      <!-- Q3. 색상 (그라데이션 바) -->
+      <section class="q" aria-labelledby="q3-label">
+        <h2 id="q3-label" class="q-title">Q3. 내가 좋아하는 커피의 색감은?</h2>
+        <div class="gradient-bar" role="radiogroup" aria-labelledby="q3-label">
+          <label><input type="radio" name="q3" value="E" aria-label="밝은 꿀빛 계열"><span></span></label>
+          <label><input type="radio" name="q3" value="C" aria-label="연한 카라멜톤"><span></span></label>
+          <label><input type="radio" name="q3" value="A" aria-label="살구빛 로스티"><span></span></label>
+          <label><input type="radio" name="q3" value="F" aria-label="웜 로즈톤"><span></span></label>
+          <label><input type="radio" name="q3" value="D" aria-label="핑크빛 베리톤"><span></span></label>
+          <label><input type="radio" name="q3" value="B" aria-label="라일락 초콜릿톤"><span></span></label>
+          <label><input type="radio" name="q3" value="G" aria-label="고동 계열"><span></span></label>
+          <label><input type="radio" name="q3" value="H" aria-label="다크 카카오톤"><span></span></label>
+        </div>
+      </section>
+
+      <!-- Q4. 기분 -->
+      <section class="q" aria-labelledby="q4-label">
+        <h2 id="q4-label" class="q-title">Q4. 지금의 나와 가까운 기분은?</h2>
+        <div class="opts">
+          <div class="opt"><input id="q4-1" type="radio" name="q4" value="AD"><label for="q4-1">강렬한 집중과 에너지가 필요해요</label></div>
+          <div class="opt"><input id="q4-2" type="radio" name="q4" value="BG"><label for="q4-2">사랑과 위로가 필요해요</label></div>
+          <div class="opt"><input id="q4-3" type="radio" name="q4" value="CE"><label for="q4-3">차분한 휴식과 여유가 필요해요</label></div>
+          <div class="opt"><input id="q4-4" type="radio" name="q4" value="FH"><label for="q4-4">활력과 달콤한 기분 전환이 필요해요</label></div>
+        </div>
+      </section>
+
+      <!-- Q5. 방식 성향 -->
+      <section class="q" aria-labelledby="q5-label">
+        <h2 id="q5-label" class="q-title">Q5. 커피를 즐길 때 나는?</h2>
+        <div class="opts">
+          <div class="opt"><input id="m1" type="radio" name="method" value="M1"><label for="m1">진하고 오래 가는 힘으로 집중을 원해요</label></div>
+          <div class="opt"><input id="m2" type="radio" name="method" value="M2"><label for="m2">향미를 섬세하게 음미하고 싶어요</label></div>
+          <div class="opt"><input id="m3" type="radio" name="method" value="M3"><label for="m3">달콤하고 시원한 전환이 필요해요</label></div>
+        </div>
+      </section>
+
+      <div class="submitbar">
+        <div class="submitcard">
+          <div class="progress" aria-live="polite"><span id="prog"></span></div>
+          <div id="progressText" class="sr-only" aria-hidden="false"></div>
+          <button id="submit" class="btn" type="button" disabled>결과 보기</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 결과 모달 -->
+<div id="result" class="result" role="dialog" aria-modal="true" aria-labelledby="combo-title">
+  <div class="result-card" id="resultCard" tabindex="-1">
+    <div class="result-body">
+      <h2 id="combo-title" class="result-title"></h2>
+      <p id="theme-line" class="theme-line"></p>
+      <p id="mbti-line" class="combo-title"></p>
+      <div id="emoji-line" class="emoji-line"></div>
+      <div id="bean-cards" class="bean-cards"></div>
+      <p id="method-text" class="method-text"></p>
+      <nav class="actions-line" aria-label="상단 링크">| <a id="goLink" href="https://linktr.ee/Ne.coffee" target="_blank" rel="noopener">네,커피 바로 가기</a> |</nav>
+      <nav class="actions-line" aria-label="결과 작업">| <a id="again" href="#">다시 하기</a> | <a id="share" href="#">공유하기</a> | <a id="copyLink" href="#">링크 복사</a> | <a id="close" href="#">닫기</a> |</nav>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+/* ===== 원두 데이터 (최신) ===== */
+const TYPES={
+  A:{en:"Chance",ko:"행운",cup:"캬라멜, 로스트 아몬드",emoji:"🍀",color:"#F6C89F"},
+  B:{en:"Amante",ko:"연인",cup:"건자두, 레드와인",emoji:"❤️",color:"#8E3A59"},
+  C:{en:"Lune",ko:"달",cup:"홍시, 캬라멜시럽",emoji:"🌙",color:"#F7D794"},
+  D:{en:"Colombia El encanto Aji Bourbon Yeast Natural",ko:"콜롬비아 내추럴",cup:"바나나스플릿, 뽀또, 밀키",emoji:"🍌",color:"#E7798E"},
+  E:{en:"Peru El Cedro Natural",ko:"페루 내추럴",cup:"사향벌꿀, 배과즙, 시나몬",emoji:"🍯",color:"#D9A441"},
+  F:{en:"Uganda Mount elgon Sironko Station Ananerobic Natural",ko:"우간다 내추럴",cup:"레몬캔디, 블루베리, 태운 캬라멜",emoji:"🫐",color:"#C47C56"},
+  G:{en:"Cameroon Oku Natural",ko:"카메룬 내추럴",cup:"군밤, 찐고구마",emoji:"🌰",color:"#8C6A43"},
+  H:{en:"Ethiopia Aricha Washed",ko:"에티오피아 워시드",cup:"다크 체리, 밀크 초콜렛",emoji:"🍫",color:"#5A3E36"}
+};
+
+/* 조합 이름 + 테마 설명 */
+const COMBO_TITLES={
+  "A+B":{title:"행운의 연인",theme:"부드러운 달콤함과 낭만이 어우러진 따뜻한 조합"},
+  "A+C":{title:"달빛 아래 행운",theme:"밝고 상쾌한 균형, 포근한 기운의 한 모금"},
+  "A+D":{title:"바나나 밀키 모험",theme:"밀키한 단맛과 경쾌한 향이 어우러진 즐거운 여정"},
+  "A+E":{title:"황금빛 향연",theme:"꿀과 견과가 녹아든 따뜻한 풍미의 정석"},
+  "A+F":{title:"레몬빛 행운",theme:"블루베리의 달콤함과 상큼함이 살아나는 균형"},
+  "A+G":{title:"따스한 행운",theme:"고소하고 포근한 감촉으로 안정감을 주는 한 잔"},
+  "A+H":{title:"달콤한 축복",theme:"초콜릿 향 속에 녹아드는 포근한 달콤함"},
+  "B+C":{title:"달빛 로망",theme:"은은한 과일향과 와인의 부드러움이 감도는 감성적인 조합"},
+  "B+D":{title:"열대의 연인",theme:"바나나와 과실의 달콤함이 로맨틱하게 어우러지는 풍미"},
+  "B+E":{title:"꿀처럼 달콤한 사랑",theme:"꿀향과 붉은 과실이 만들어내는 따뜻한 하모니"},
+  "B+F":{title:"상큼한 포옹",theme:"블루베리의 단맛과 상큼함이 만나는 활기찬 한 잔"},
+  "B+G":{title:"포근한 약속",theme:"구운 견과의 깊은 풍미 속에 담긴 포근한 감정"},
+  "B+H":{title:"초콜릿 키스",theme:"부드러운 초콜릿과 레드베리의 감미로운 조화"},
+  "C+D":{title:"달의 모험",theme:"바나나 밀키 향이 어우러진 부드럽고 낭만적인 조합"},
+  "C+E":{title:"달빛의 향기",theme:"달콤한 꿀빛에 감도는 은은한 여운"},
+  "C+F":{title:"레몬 달빛",theme:"블루베리와 레몬의 산뜻함이 달빛처럼 퍼지는 맛"},
+  "C+G":{title:"따뜻한 달빛",theme:"부드러운 단맛과 고소함이 어우러진 차분한 한 모금"},
+  "C+H":{title:"달밤의 속삭임",theme:"초콜릿 향이 감싸는 부드러운 위로의 잔"},
+  "D+E":{title:"밀키 골드",theme:"밀키한 질감과 꿀의 달콤함이 어우러진 고급스러운 밸런스"},
+  "D+F":{title:"바나나 캔디 드림",theme:"바나나와 블루베리가 어우러진 경쾌한 트로피컬 무드"},
+  "D+G":{title:"달콤한 모험",theme:"고소한 구운 향 속에서 퍼지는 밀키한 부드러움"},
+  "D+H":{title:"밀키 베리 드림",theme:"밀키한 단맛과 베리의 산미가 조화된 크리미 피니시"},
+  "E+F":{title:"꿀빛 스파클",theme:"꿀의 달콤함 속에 블루베리의 청량함이 피어오르는 한 잔"},
+  "E+G":{title:"황금빛 온기",theme:"따뜻하고 안정적인 향미로 마음을 녹이는 조화"},
+  "E+H":{title:"달콤한 서약",theme:"초콜릿과 꿀의 깊은 단맛이 이어주는 부드러운 여운"},
+  "F+G":{title:"블루베리 향연",theme:"블루베리의 풍성한 향과 구운 향이 어우러진 경쾌한 조합"},
+  "F+H":{title:"블루베리 캬라멜 블루스",theme:"블루베리와 캐러멜, 초콜릿의 재즈 같은 하모니"},
+  "G+H":{title:"겨울밤의 고백",theme:"따뜻한 견과와 초콜릿의 달콤함으로 완성되는 포근한 피날레"}
+};
+
+/* MBTI 온도 추천 */
+const MBTI_TEMP={ ISTJ:{line1:"질서 속의 평온,", line2:"따뜻한 컵이 하루를 단단하게 해줄 거예요.", temp:"hot"}, ISFJ:{line1:"조용한 배려에 어울리는 온기,", line2:"부드럽게 스며드는 따뜻함을.", temp:"hot"}, INFJ:{line1:"고요한 사색에 어울리는 온기,", line2:"마음을 감싸는 한 잔.", temp:"hot"}, INTJ:{line1:"선명한 집중을 위한 따뜻함,", line2:"차분히 설계된 한 모금.", temp:"hot"}, ISTP:{line1:"선택은 간결하게,", line2:"차갑게 깔끔한 한 잔이 딱.", temp:"ice"}, ISFP:{line1:"감각에 스며드는 청량함,", line2:"차갑게 더 살아나는 순간들.", temp:"ice"}, INFP:{line1:"섬세한 마음에 잔잔한 온기,", line2:"따뜻함이 오래 남아요.", temp:"hot"}, INTP:{line1:"머릿속 흐름을 깨우는 시원함,", line2:"맑고 차가운 산뜻함.", temp:"ice"}, ESTP:{line1:"지금 이 순간,", line2:"차갑게 터지는 리듬으로 속도를 올려요.", temp:"ice"}, ESFP:{line1:"반짝이는 오늘,", line2:"시원함이 더 빛나게 해줄 거예요.", temp:"ice"}, ENFP:{line1:"활기찬 스파크에 청량한 응답,", line2:"차갑게 식힌 한 잔으로!", temp:"ice"}, ENTP:{line1:"아이디어의 파도를 타고,", line2:"크리스피한 시원함으로 전개하세요.", temp:"ice"}, ESTJ:{line1:"명확한 결정을 돕는 온기,", line2:"단단하고 깔끔한 따뜻함.", temp:"hot"}, ESFJ:{line1:"따뜻한 마음에 어울리는 온도,", line2:"부드럽게 함께 머무는 한 잔.", temp:"hot"}, ENFJ:{line1:"사람과 순간을 잇는 온기,", line2:"마음을 데워주는 따뜻함.", temp:"hot"}, ENTJ:{line1:"추진력을 위한 집중,", line2:"뜨겁게 정리되는 한 모금.", temp:"hot"} };
+
+/* 방식 문구 */
+const METHODS={ M1:{ line1:"아메리카노로 즐기세요.", line2:"진한 농도와 긴 여운이 몰입을 더 깊게 해줄 거예요." }, M2:{ line1:"핸드드립으로 즐기세요.", line2:"선명한 향미와 깔끔한 질감이", line3:"커피의 진심을 드러내줄 거예요." }, M3:{ line1:"콜드브루로 즐기세요.", line2:"부드럽고 달콤한 여운이 시원하게 하루를 바꿔줄 거예요." } };
+const METHOD_EMOJI={M1:"☕️",M2:"🍵",M3:"🥤"};
+
+/* ===== 유틸 ===== */
+const $=s=>document.querySelector(s); const form=$('#quiz'); const submitBtn=$('#submit'); const prog=$('#prog'); const progressText=$('#progressText');
+function updateProgress(){ let count=0; const required=5; const ei=form.querySelector('input[name="mbti-ei"]:checked'); const ns=form.querySelector('input[name="mbti-ns"]:checked'); const ft=form.querySelector('input[name="mbti-ft"]:checked'); const jp=form.querySelector('input[name="mbti-jp"]:checked'); if(ei&&ns&&ft&&jp)count++; if(form.querySelector('input[name="q2"]:checked'))count++; if(form.querySelector('input[name="q3"]:checked'))count++; if(form.querySelector('input[name="q4"]:checked'))count++; if(form.querySelector('input[name="method"]:checked'))count++; const pct=Math.round((count/required)*100); prog.style.width=pct+'%'; progressText.textContent=`진행률 ${pct}%`; submitBtn.disabled=count!==required; }
+form.addEventListener('change',()=>{ saveToStorage(); updateProgress(); }); updateProgress();
+function pairKey(a,b){return[a,b].sort().join('+');}
+function getMBTI(){ const ei=form.querySelector('input[name="mbti-ei"]:checked')?.value||''; const ns=form.querySelector('input[name="mbti-ns"]:checked')?.value||''; const ft=form.querySelector('input[name="mbti-ft"]:checked')?.value||''; const jp=form.querySelector('input[name="mbti-jp"]:checked')?.value||''; return ei+ns+ft+jp; }
+
+/* ===== 결과 생성 ===== */
+function computeResult(){ const totals={A:0,B:0,C:0,D:0,E:0,F:0,G:0,H:0}; ["q2","q3","q4"].forEach(q=>{ const sel=form.querySelector(`input[name="${q}"]:checked`); if(sel){ sel.value.split("").forEach(l=>totals[l]++); } }); const ei=form.querySelector('input[name="mbti-ei"]:checked')?.value; const ns=form.querySelector('input[name="mbti-ns"]:checked')?.value; const ft=form.querySelector('input[name="mbti-ft"]:checked')?.value; const jp=form.querySelector('input[name="mbti-jp"]:checked')?.value; if(ei==="E"){totals.F+=0.5;totals.B+=0.5;} else if(ei==="I"){totals.A+=0.5;totals.C+=0.5;} if(ns==="N"){totals.D+=0.5;totals.E+=0.5;} else if(ns==="S"){totals.G+=0.5;totals.H+=0.5;} if(ft==="F"){totals.B+=0.5;totals.C+=0.5;} else if(ft==="T"){totals.A+=0.5;totals.D+=0.5;} if(jp==="J"){totals.F+=0.5;totals.H+=0.5;} else if(jp==="P"){totals.E+=0.5;totals.G+=0.5;} const base = Object.keys(totals).reduce((m,k)=>{ m[k]=0; return m; },{}); const apply=(name,w)=>{ const sel=form.querySelector(`input[name="${name}"]:checked`); if(!sel) return; sel.value.split("").forEach(l=>base[l]+=w); }; apply('q2',4); apply('q4',3); apply('q3',2); if(ei){ (ei==="E"?['F','B']:['A','C']).forEach(l=> base[l]+=0.4); } if(ns){ (ns==="N"?['D','E']:['G','H']).forEach(l=> base[l]+=0.4); } if(ft){ (ft==="F"?['B','C']:['A','D']).forEach(l=> base[l]+=0.4); } if(jp){ (jp==="J"?['F','H']:['E','G']).forEach(l=> base[l]+=0.4); } const ordered = Object.keys(totals).sort((a,b)=>{ if(totals[b]!==totals[a]) return totals[b]-totals[a]; if(base[b]!==base[a]) return base[b]-base[a]; return a.localeCompare(b); }); return {top1:ordered[0], top2:ordered[1]}; }
+
+function renderResult(){ const {top1, top2} = computeResult(); const T1=TYPES[top1], T2=TYPES[top2]; const comboObj=COMBO_TITLES[pairKey(top1,top2)]; const comboTitle= (typeof comboObj==='string') ? comboObj : (comboObj?.title || `${T1.ko}와 ${T2.ko}의 조합`); const comboTheme= (typeof comboObj==='object' && comboObj?.theme) ? comboObj.theme : ''; document.getElementById('combo-title').textContent=comboTitle; document.getElementById('theme-line').textContent=comboTheme; const mbti=getMBTI(); const meta=MBTI_TEMP[mbti] || {line1:"오늘의 커피가 어울리는 온도,", line2:"부드럽게 머무는 한 잔.", temp:"hot"}; document.getElementById('mbti-line').innerHTML = `${meta.line1}<br>${meta.line2}`; const methodKey=form.querySelector('input[name="method"]:checked')?.value||"M1"; const tempEmoji = (methodKey==="M3") ? "❄️" : (meta.temp==="ice" ? "❄️" : "🔥"); const methodEmoji = METHOD_EMOJI[methodKey]; document.getElementById('emoji-line').textContent = `${T1.emoji}${T2.emoji}${tempEmoji}${methodEmoji}`; const beanCards=document.getElementById('bean-cards'); const koLine = key => TYPES[key].ko; beanCards.innerHTML = `
+    <div class="bean">
+      <p class="bean-title-en"><span class="dot" style="background:${TYPES[top1].color}"></span>${TYPES[top1].en}</p>
+      <p class="bean-title-ko">${koLine(top1)}</p>
+      <p class="bean-note">${TYPES[top1].cup}</p>
+    </div>
+    <div class="bean">
+      <p class="bean-title-en"><span class="dot" style="background:${TYPES[top2].color}"></span>${TYPES[top2].en}</p>
+      <p class="bean-title-ko">${koLine(top2)}</p>
+      <p class="bean-note">${TYPES[top2].cup}</p>
+    </div>`; const m = METHODS[methodKey]; let methodHtml = `${m.line1}<br>${m.line2}`; if(m.line3){ methodHtml += `<br>${m.line3}`; } document.getElementById('method-text').innerHTML = methodHtml; }
+
+/* ===== 모달 제어 ===== */
+const resultEl = document.getElementById('result'); const resultCard = document.getElementById('resultCard'); const againLink = document.getElementById('again'); const closeLink = document.getElementById('close'); const shareLink = document.getElementById('share'); const copyLink = document.getElementById('copyLink');
+function trapFocus(e){ if(!resultEl.classList.contains('show')) return; const focusables = resultEl.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])'); if(!focusables.length) return; const first=focusables[0], last=focusables[focusables.length-1]; if(e.key==='Tab'){ if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); } else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); } } }
+function showModal(){ resultEl.classList.add('show'); document.body.style.overflow='hidden'; setTimeout(()=>{ resultCard.focus(); }, 0); }
+function hideModal(){ resultEl.classList.remove('show'); document.body.style.overflow=''; }
+
+submitBtn.addEventListener('click', ()=>{ const required = [ ['mbti-ei','mbti-ns','mbti-ft','mbti-jp'], ['q2'],['q3'],['q4'],['method'] ]; const ok = required.every(g=> g.length>1 ? g.every(n=> form.querySelector(`input[name="${n}"]:checked`)) : !!form.querySelector(`input[name="${g[0]}"]:checked`) ); if(!ok){ toast('모든 문항을 선택해주세요.'); return; } renderResult(); showModal(); history.replaceState(null,'', buildURLFromAnswers()); });
+againLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); form.reset(); updateProgress(); localStorage.removeItem('necoffee-fit'); history.replaceState(null,'', location.pathname); window.scrollTo({top:0,behavior:'smooth'}); });
+closeLink.addEventListener('click', (e)=>{ e.preventDefault(); hideModal(); });
+resultEl.addEventListener('click', (e)=>{ if(e.target===resultEl) hideModal(); });
+window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && resultEl.classList.contains('show')) hideModal(); trapFocus(e); });
+
+/* ===== 공유: 카드 이미지 + 텍스트(답변 포함 링크) ===== */
+async function shareCard(e){ e.preventDefault(); const canvas = await html2canvas(document.getElementById('resultCard'), { backgroundColor:'#ffffff', scale: Math.max(2, window.devicePixelRatio||1), useCORS:true }); const dataUrl = canvas.toDataURL('image/png'); const blob = await (await fetch(dataUrl)).blob(); const file = new File([blob], 'ne-coffee-result.png', { type: 'image/png', lastModified: Date.now() }); const link = buildURLFromAnswers(true); const title='네,커피 핏팅 테스트'; if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files:[file], text: link, title }); return; } catch(_){} } if (navigator.share) { try { await navigator.share({ text: link, title }); return; } catch(_){} } try { await navigator.clipboard.writeText(link); toast('링크를 복사했어요.'); } catch(_) { toast('링크 복사 실패. 이미지를 저장합니다.'); } const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='ne-coffee-result.png'; document.body.appendChild(a); a.click(); a.remove(); window.open(dataUrl, '_blank'); }
+shareLink.addEventListener('click', shareCard);
+copyLink.addEventListener('click', (e)=>{ e.preventDefault(); const link=buildURLFromAnswers(true); navigator.clipboard.writeText(link).then(()=>toast('링크를 복사했어요.')).catch(()=>toast('복사 실패 ㅠㅠ')); });
+
+/* ===== 배너: 세션 동안 랜덤 고정 ===== */
+(function(){ const imgEl = document.getElementById('bannerImg'); const BANNERS = ['banner1.jpg','banner2.jpg','banner3.jpg','banner4.jpg','banner5.jpg','banner6.jpg']; const key='necoffee-banner-pick'; let pick=sessionStorage.getItem(key); if(!pick){ pick = BANNERS[Math.floor(Math.random()*BANNERS.length)]; sessionStorage.setItem(key,pick); } const pre = new Image(); pre.src = pick; imgEl.style.opacity = .3; pre.onload = ()=>{ imgEl.src = pick; imgEl.style.opacity = .82; }; setTimeout(()=>{ imgEl.src = pick; imgEl.style.opacity = .82; }, 80); })();
+
+/* ===== 저장/복원 & 딥링크 ===== */
+function saveToStorage(){ const data = serializeAnswers(); localStorage.setItem('necoffee-fit', JSON.stringify(data)); }
+function restoreFromStorage(){ try{ const saved = JSON.parse(localStorage.getItem('necoffee-fit')||'null'); if(saved) applyAnswers(saved); }catch(_){ }}
+function serializeAnswers(){ const get=(name)=> form.querySelector(`input[name="${name}"]:checked`)?.value||''; return { ei:get('mbti-ei'), ns:get('mbti-ns'), ft:get('mbti-ft'), jp:get('mbti-jp'), q2:get('q2'), q3:get('q3'), q4:get('q4'), m:get('method') }; }
+function applyAnswers(obj){ const map={ 'mbti-ei':'ei', 'mbti-ns':'ns', 'mbti-ft':'ft', 'mbti-jp':'jp', 'q2':'q2', 'q3':'q3', 'q4':'q4', 'method':'m' }; Object.entries(map).forEach(([name,key])=>{ if(!obj[key]) return; const sel = form.querySelector(`input[name="${name}"][value="${obj[key]}"]`); if(sel){ sel.checked=true; } }); updateProgress(); }
+function buildURLFromAnswers(includeOrigin=false){ const a=serializeAnswers(); const params=new URLSearchParams(a); const base = includeOrigin ? (location.origin+location.pathname) : location.pathname; return base + '?' + params.toString(); }
+function loadFromQuery(){ const p = new URLSearchParams(location.search); if(!p.toString()) return false; const obj={ ei:p.get('ei')||'', ns:p.get('ns')||'', ft:p.get('ft')||'', jp:p.get('jp')||'', q2:p.get('q2')||'', q3:p.get('q3')||'', q4:p.get('q4')||'', m:p.get('m')||'' }; applyAnswers(obj); const all = Object.values(obj).every(v=>v && v.length); if(all){ renderResult(); showModal(); } return all; }
+
+/* ===== 토스트 ===== */
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1400); }
+
+// 초기화
+restoreFromStorage();
+updateProgress();
+loadFromQuery();
+</script>
+</body>
+</html>
