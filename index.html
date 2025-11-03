@@ -34,7 +34,13 @@ body{ font-family:'Noto Serif KR', serif; color:var(--ink); line-height:1.7; let
 .opt input{position:absolute;opacity:0;pointer-events:none}
 .opt label{ display:block;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer; transition:box-shadow .15s ease,border-color .15s ease,transform .05s ease }
 .opt label:active{transform:scale(.995)}
-.opt input:checked + label{border-color:var(--accent);box-shadow:0 0 0 2px rgba(106,75,59,.12) inset}
+.opt input:checked + label {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(106,75,59,.15) inset;
+  background: var(--accent);
+  color: #fff;
+  transition: all .15s ease;
+}
 /* MBTI (Q1) */
 .mbti-rows{display:grid;gap:12px}
 .mbti-row{display:grid;grid-template-columns:1fr;gap:12px}
@@ -247,7 +253,7 @@ const TYPES={
   A:{en:"Chance",ko:"행운",cup:"캬라멜, 로스트 아몬드",emoji:"🍀",color:"#F6C89F"},
   B:{en:"Amante",ko:"연인",cup:"건자두, 레드와인",emoji:"❤️",color:"#8E3A59"},
   C:{en:"Lune",ko:"달",cup:"홍시, 캬라멜시럽",emoji:"🌙",color:"#F7D794"},
-  D:{en:"Colombia El encanto Aji Bourbon Yeast Natural",ko:"콜롬비아 내추럴",cup:"바나나스플릿, 뽀또, 밀키",emoji:"🍌",color:"#EAB676"},
+  D:{en:"Colombia El encanto Aji Bourbon Yeast Natural",ko:"콜롬비아 내추럴",cup:"바나나스플릿, 뽀또, 밀키",emoji:"🍌",color:"#E7798E"},
   E:{en:"Peru El Cedro Natural",ko:"페루 내추럴",cup:"사향벌꿀, 배과즙, 시나몬",emoji:"🍯",color:"#D9A441"},
   F:{en:"Uganda Mount elgon Sironko Station Ananerobic Natural",ko:"우간다 내추럴",cup:"레몬캔디, 블루베리, 태운 캬라멜",emoji:"🫐",color:"#C47C56"},
   G:{en:"Cameroon Oku Natural",ko:"카메룬 내추럴",cup:"군밤, 찐고구마",emoji:"🌰",color:"#8C6A43"},
